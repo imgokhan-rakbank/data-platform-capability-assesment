@@ -26,9 +26,9 @@
 
 | Level | Items | Domains Impacted |
 |-------|-------|------------------|
-| Bronze | 35 | All 8 domains |
-| Silver | 32 | All 8 domains |
-| Gold | 28 | All 8 domains |
+| Bronze | 36 | All 8 domains |
+| Silver | 40 | All 8 domains |
+| Gold | 37 | All 8 domains |
 | Platinum | 18 | All 8 domains |
 
 ---
