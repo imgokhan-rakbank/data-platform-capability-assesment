@@ -50,3 +50,17 @@ assessment/
 | 3 | Defined | Standardized, documented, repeatable |
 | 4 | Managed | Measured, monitored, automated |
 | 5 | Optimizing | Continuously improved, self-service, innovation-driven |
+
+---
+
+## Output Deliverables
+
+The `output/` folder contains generated deliverables from the completed assessment:
+
+| File | Description |
+|------|-------------|
+| [`heatmap.svg`](output/heatmap.svg) | SVG heat-map diagram showing all 8 domains and 36 sub-areas with colour-coded maturity scores |
+| [`heatmap.html`](output/heatmap.html) | HTML wrapper for viewing the heat map in a browser |
+| [`executive-presentation.pptx`](output/executive-presentation.pptx) | PowerPoint executive presentation (16 slides) built from the deck template |
+| [`full-assessment-report.docx`](output/full-assessment-report.docx) | Word document with full assessment detail – current state, key gaps, and recommendations |
+| [`maturity-backlog.md`](output/maturity-backlog.md) | Comprehensive improvement backlog with Bronze/Silver/Gold/Platinum maturity levels and prioritised items |
