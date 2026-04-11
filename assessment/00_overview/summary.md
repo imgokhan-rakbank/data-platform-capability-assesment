@@ -12,13 +12,13 @@
 
 | Sub-Area | Score (1–5) | Notes |
 |----------|-------------|-------|
-| Event-Driven Integration | | |
-| Batch-Driven Integration | | |
-| API-Driven Integration | | |
-| Data Virtualization | | |
-| Orchestration | | |
-| Data Automation | | |
-| **Domain Score** | | |
+| Event-Driven Integration | 2 | Confluent Cloud in place; CDC unreliable, monitoring and automation lacking. |
+| Batch-Driven Integration | 2 | ADF and Databricks handle core processing; supporting functions absent. |
+| API-Driven Integration | 1 | No data APIs exist; no process defined. |
+| Data Virtualization | 1 | No virtualization solution in place. |
+| Orchestration | 2 | ADF and Databricks used; surrounding orchestration processes not established. |
+| Data Automation | 2 | GitHub Actions used for provisioning; pipeline automation and process lacking. |
+| **Domain Score** | **1.7** | |
 
 ---
 
@@ -26,14 +26,14 @@
 
 | Sub-Area | Score (1–5) | Notes |
 |----------|-------------|-------|
-| Data Processing | | |
-| Data Storage Management | | |
-| Data Modeling | | |
-| DataOps | | |
-| ML / AI Model Management | | |
-| Self-Service Data Preparation | | |
-| Data Product Management | | |
-| **Domain Score** | | |
+| Data Processing | 2 | Databricks medallion architecture in place; supporting functions not yet implemented. |
+| Data Storage Management | 3 | Databricks / Delta Lake well-established; monitoring and process definitions lacking. |
+| Data Modeling | 1 | Ad hoc, no standards, process, automation, or collaboration tooling. |
+| DataOps | 1 | Ad hoc; no automation, monitoring, or formal DataOps process. |
+| ML / AI Model Management | 1 | Ad hoc; no process, standards, automation, or monitoring for models. |
+| Self-Service Data Preparation | 1 | No self-service capability; all prep is engineer-driven. |
+| Data Product Management | 1 | Concept not adopted; no ownership, documentation, or tooling. |
+| **Domain Score** | **1.4** | |
 
 ---
 
@@ -41,11 +41,11 @@
 
 | Sub-Area | Score (1–5) | Notes |
 |----------|-------------|-------|
-| Profiling | | |
-| DQ Rules Management | | |
-| DQ Monitoring | | |
-| Data Observability | | |
-| **Domain Score** | | |
+| Profiling | 1 | Ad hoc and manual; not automated for the data platform. |
+| DQ Rules Management | 1 | Not formalized; no rules engine or standard process. |
+| DQ Monitoring | 1 | Not implemented for the data platform. |
+| Data Observability | 1 | No observability tooling or practice in place. |
+| **Domain Score** | **1.0** | |
 
 ---
 
@@ -53,11 +53,11 @@
 
 | Sub-Area | Score (1–5) | Notes |
 |----------|-------------|-------|
-| Data Marketplace | | |
-| Data Visualization | | |
-| Exploratory Data Analysis | | |
-| Self-Service Analytics | | |
-| **Domain Score** | | |
+| Data Marketplace | 1 | No marketplace; analytics ad hoc with no standards or automation. |
+| Data Visualization | 1 | Ad hoc, IT-dependent; no standards or automation. |
+| Exploratory Data Analysis | 1 | EDA not practiced; sandbox environment unused. |
+| Self-Service Analytics | 1 | All reporting is IT-driven; no self-service capability. |
+| **Domain Score** | **1.0** | |
 
 ---
 
@@ -65,10 +65,10 @@
 
 | Sub-Area | Score (1–5) | Notes |
 |----------|-------------|-------|
-| Data Catalog | | |
-| Data Discovery | | |
-| Lineage & Impact Analysis | | |
-| **Domain Score** | | |
+| Data Catalog | 2 | Partial cataloging exists in source systems; not integrated or platform-wide. |
+| Data Discovery | 2 | Discovery limited to source systems; not integrated or platform-wide. |
+| Lineage & Impact Analysis | 1 | Limited and not end-to-end; no integrated lineage for the data platform. |
+| **Domain Score** | **1.7** | |
 
 ---
 
@@ -76,11 +76,11 @@
 
 | Sub-Area | Score (1–5) | Notes |
 |----------|-------------|-------|
-| Data Privacy Management | | |
-| Data Protection | | |
-| Access Governance | | |
-| Audit Management | | |
-| **Domain Score** | | |
+| Data Privacy Management | 1 | Largely absent; only partial data classification exists. |
+| Data Protection | 1 | Limited to encryption at rest; other protection controls absent. |
+| Access Governance | 1 | Basic and manual; lacks automation and periodic access review. |
+| Audit Management | 1 | Absent; no process, tooling, or automation for audit trails. |
+| **Domain Score** | **1.0** | |
 
 ---
 
@@ -88,10 +88,10 @@
 
 | Sub-Area | Score (1–5) | Notes |
 |----------|-------------|-------|
-| Data Strategy Management | | |
-| Data Standards Management | | |
-| Data Stewardship | | |
-| **Domain Score** | | |
+| Data Strategy Management | 1 | Absent; no strategy, ownership, or process defined. |
+| Data Standards Management | 1 | Only a basic business glossary exists; no enforced standards. |
+| Data Stewardship | 1 | Absent; no steward roles, process, or tooling. |
+| **Domain Score** | **1.0** | |
 
 ---
 
@@ -99,10 +99,10 @@
 
 | Sub-Area | Score (1–5) | Notes |
 |----------|-------------|-------|
-| Platform Monitoring | | |
-| Automation & CI/CD | | |
-| Development Practices | | |
-| **Domain Score** | | |
+| Platform Monitoring | 1 | Absent; no process, tooling, or automation for platform health monitoring. |
+| Automation & CI/CD | 1 | Basic infrastructure provisioning only; no CI/CD for data pipelines. |
+| Development Practices | 1 | Ad hoc; no coding standards, documentation framework, or code review process. |
+| **Domain Score** | **1.0** | |
 
 ---
 
@@ -110,15 +110,15 @@
 
 | Domain | Score |
 |--------|-------|
-| 1. Data Integration | |
-| 2. Data Management | |
-| 3. Data Quality Management | |
-| 4. Analytics | |
-| 5. Metadata Management | |
-| 6. Security & Compliance | |
-| 7. Data Governance | |
-| 8. Supporting Technology | |
-| **Overall Score** | |
+| 1. Data Integration | 1.7 |
+| 2. Data Management | 1.4 |
+| 3. Data Quality Management | 1.0 |
+| 4. Analytics | 1.0 |
+| 5. Metadata Management | 1.7 |
+| 6. Security & Compliance | 1.0 |
+| 7. Data Governance | 1.0 |
+| 8. Supporting Technology | 1.0 |
+| **Overall Score** | **1.2** |
 
 ---
 
@@ -132,8 +132,6 @@ Copy scores above into a radar chart or heat map tool (e.g., Excel, Power BI, Ta
 
 | Priority | Domain | Gap / Finding | Recommended Action | Owner | Target Date |
 |----------|--------|---------------|--------------------|-------|-------------|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
-| 4 | | | | | |
-| 5 | | | | | |
+| 1 | Data Management | Data modeling methodology is not fit for medallion architecture; lacks standards, automation, and collaboration. | Redesign and implement a robust data modeling approach aligned with medallion architecture; establish standards, automation, and collaborative tooling. | Data Management Lead | |
+| 2 | Supporting Technology / Data Quality | Platform lacks comprehensive monitoring, data quality framework (including reconciliations), and automated data integrations. | Implement platform-wide monitoring, a data quality framework covering profiling, rules, monitoring, and reconciliations; automate data integration processes. | Platform Engineering & Data Quality Leads | |
+| 3 | Data Governance & Integration | No unified standards or integration between governance, modeling, and Databricks, leading to drift. | Define and enforce data standards; integrate governance, modeling, and Databricks to ensure consistency and eliminate drift. | Data Governance & Platform Leads | |
