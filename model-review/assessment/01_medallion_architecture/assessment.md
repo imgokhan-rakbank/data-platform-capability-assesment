@@ -105,17 +105,17 @@ This sub-area evaluates whether shared design principles — such as key design,
 
 | Aspect | Details |
 |--------|---------|
-| Surrogate Key Strategy | |
-| Historisation Pattern | |
-| Standard Audit Columns List | |
-| Known Gaps / Limitations | |
+| Surrogate Key Strategy | Not defined. Natural / source system keys are carried through all layers (e.g., `account_id`, `CIF`, `account_number`). No platform-wide hash or UUID surrogate key strategy exists. |
+| Historisation Pattern | SCD Type 2 (`effective_from`, `effective_to`, `is_current`) is applied to analytical Silver tables (e.g., `customer.customer`, `account.account_agreement_master`, `loan.loan_account_master`). Silver ODS tables follow SCD Type 1 (overwrite). However, SCD2 is only present on ~11 of 148 Silver tables (~7% coverage). Source-specific schemas (finacle, flexcube, fis, prime4) have no historisation. |
+| Standard Audit Columns List | Partially defined. Observed columns: `source_system_code` (~35 tables), `Source_System_Id` (~35 tables), `Create_Date` / `Update_Date` / `Delete_Date` (~24 tables), `run_id` (~20 tables), `source_ingestion_date` (~20 tables), `IsActiveFlag` (~24 tables). Not consistently applied across all 148 tables. Column naming varies (`created_date` vs `Create_Date`). |
+| Known Gaps / Limitations | No surrogate key strategy; SCD2 coverage is ~7% of tables; audit columns inconsistently applied; no timezone standard (timestamps in unknown timezone); no null/sentinel value policy; no partition key convention; no cross-layer PK traceability strategy beyond Databricks Unity Catalog lineage. |
 
 ### Maturity Score
 
 | Dimension | Score (1–5) | Justification |
 |-----------|-------------|---------------|
-| Conceptual Clarity | 1 | No standard strategies or conventions are defined. |
-| Logical Design Consistency | 1 | No consistent application of design principles. |
-| Physical Implementation | 1 | No enforcement or documentation of physical standards. |
-| Standards Conformance | 1 | No standards are defined or enforced. |
-| **Sub-Area Overall** | 1 | Practices are at the "Initial" level. |
+| Conceptual Clarity | 1 | No standard strategies or conventions are defined or documented at a level sufficient for enforcement. |
+| Logical Design Consistency | 1 | SCD2 partially applied (~7% of tables); no surrogate key strategy; audit columns inconsistently present. |
+| Physical Implementation | 1 | No enforcement or automated checks; significant inconsistency across 148 Silver tables. |
+| Standards Conformance | 1 | No standards are formally defined or enforced. Evidence from the physical model shows multiple naming styles, type inconsistencies, and missing historisation. |
+| **Sub-Area Overall** | 1 | Practices are at the "Initial" level. Architecture patterns document exists but is not operationalised. |
