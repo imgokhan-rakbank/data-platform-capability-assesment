@@ -4,7 +4,7 @@
 
 | Level | Label | Target Score | Description |
 |-------|-------|-------------|-------------|
-| **Bronze** | Developing | 2.0 | Core processes documented. Basic monitoring in place. Tooling foundations established. Manual but repeatable. |
+| **Bronze** | Developing | 2.0 | Core processes documented. Core LDM implemented Basic monitoring in place. Tooling foundations established. Manual but repeatable. |
 | **Silver** | Defined | 3.0 | Standardised across teams. Automated monitoring & DQ. Full CI/CD. Catalog integrated. Self-service piloted. |
 | **Gold** | Managed | 4.0 | KPIs/SLAs tracked & acted upon. End-to-end observability. Data products adopted. Advanced security. ML lifecycle managed. |
 | **Platinum** | Optimizing | 5.0 | AI-augmented. Full self-service. Continuous improvement. Innovation-driven. Leading-practice data mesh. |
