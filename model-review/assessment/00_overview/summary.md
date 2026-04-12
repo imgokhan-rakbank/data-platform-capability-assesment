@@ -13,9 +13,9 @@
 | Sub-Area | Score (1–5) | Notes |
 |----------|-------------|-------|
 | Architecture Conformance | 1 | ADR exists; boundaries not enforced; no data contracts; data bypasses layers without governance. |
-| Layer Responsibility Definition | 2 | Basic definitions exist; owners assigned but accountability unclear; no templates or checklists. |
+| Layer Responsibility Definition | 1 | Two Silver catalogs in parallel (`silver_dev_v2` + a second); Silver ODS/Analytical sub-layers not physically separated per architecture spec; basic definitions exist but accountability unclear. |
 | Cross-Layer Design Principles | 1 | No surrogate key strategy; SCD2 on ~7% of Silver tables; audit columns inconsistent; no timezone/null standards. |
-| **Domain Score** | **1.3** | |
+| **Domain Score** | **1.0** | |
 
 ---
 
@@ -43,6 +43,7 @@
 | Banking Domain Completeness (Foundational) | 2 | Most foundational areas have some tables but Product and Employee/HR absent; no unified Account, Transaction, or Party model; no inter-entity RI validation. |
 | Banking Domain Completeness (Extended / Risk) | 1 | Only partial credit risk (NPL, LGD/LTV, provisions); liquidity, market risk, OpRisk, AML transaction monitoring, and large exposure entirely absent. |
 | Best Practices Adherence | 1 | Aggregations in Silver; multiple tables per entity; PII unmasked; no reconciliation; no late-data policy; no schema change management. |
+| **Dual Silver Layer Problem** ⚠️ | **1** | **Two parallel Silver catalogs in operation (`silver_dev_v2` + second catalog confirmed via artifact). No single authoritative Silver — critical DATA-PRIN-004 violation. ODS and Analytical sub-layers co-located without prescribed namespace separation.** |
 | **Domain Score** | **1.4** | |
 
 ---

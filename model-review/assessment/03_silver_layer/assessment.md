@@ -157,7 +157,7 @@ Physical design at Silver covers the concrete implementation of the logical mode
 
 | # | Question | Answer / Evidence |
 |---|----------|-------------------|
-| 1 | Is there a defined and consistently applied naming convention for Silver databases, schemas, and tables (e.g., `silver.<domain>.<entity>_<grain>`)? | Defined in architecture documents (`architecture_patterns.txt`) with two sub-layers: Silver ODS (`silver_ods.{source_system}.{schema}_{table}`) and Silver Analytical (`silver_analytical.{domain}.{entity}`). However, the physical catalog (`silver_dev_v2`) shows mixed adherence: analytical schemas (customer, account, loan, credit_card) follow domain naming, but source-specific schemas (finacle, flexcube, erp, fis, prime4, eximbills) replicate ODS naming. Column naming is inconsistent: 72 of 148 tables have PascalCase column names (e.g., the entire `customer.customer` table), while others use snake_case — not enforced. |
+| 1 | Is there a defined and consistently applied naming convention for Silver databases, schemas, and tables (e.g., `silver.<domain>.<entity>_<grain>`)? | Defined in architecture documents (`architecture_patterns.txt`) with two sub-layers: Silver ODS (`silver_ods.{source_system}.{schema}_{table}`) and Silver Analytical (`silver_analytical.{domain}.{entity}`). However, the physical catalog (`silver_dev_v2`) shows mixed adherence: analytical schemas (customer, account, loan, credit_card) follow domain naming, but source-specific schemas (finacle, flexcube, erp, fis, prime4, eximbills) replicate ODS naming. Column naming is inconsistent: 72 of 148 tables have PascalCase column names (e.g., the entire `customer.customer` table), while others use snake_case — not enforced. **Critical: The `_v2` suffix on the catalog name (`silver_dev_v2`) indicates this is not the first Silver catalog — a prior version (`silver_dev` or equivalent) exists and may still be active. The prescribed namespace split (`silver_ods.*` vs `silver_analytical.*`) is not implemented; both ODS-style (103 tables) and analytical domain tables (45 tables) co-exist under a single catalog.** |
 | 2 | Are surrogate keys generated consistently (e.g., hash of natural key, UUID) to decouple Silver from source system identifiers? | No. Natural / source-system keys are used throughout (e.g., `account_id`, `account_number`, `CIF_NO`, `cif_no`). No platform-wide surrogate key generation strategy (hash or UUID) is implemented. Different tables use different names for what appears to be the same concept (`account_id` vs. `account_number` vs. `CIF_NO`). |
 | 3 | Is the historisation / SCD pattern (Type 1 overwrite, Type 2 versioning, Type 4 history table) defined per entity type and consistently implemented? | Partially. SCD Type 2 (`effective_from`, `effective_to`, `is_current`) is implemented on 11 of 148 Silver tables — primarily the key analytical entities: `customer.customer`, `account.account_agreement_master`, `loan.loan_account_master`, `loan.loan_transaction`, `loan.loss_given_default`, `loan.account_loss_given_default_detail`, `customer.customer_demographics`, `customer.customer_preferences`, `account.currency_units_conversion_rate`. The remaining ~137 tables (source-specific ODS schemas: finacle, flexcube, erp, fis, prime4) use SCD Type 1 (overwrite) with no history. |
 | 4 | Are standard Silver audit / lineage columns present on every table: `silver_created_ts`, `silver_updated_ts`, `source_system_code`, `bronze_batch_id`, `is_current_flag`, `valid_from_ts`, `valid_to_ts`? | Partially. Evidence from the physical model: `source_system_code` is present on ~35 tables, `Create_Date` / `Update_Date` / `Delete_Date` on ~24 tables, `run_id` on ~20 tables, `source_ingestion_date` on ~20 tables. These are not uniformly present across all 148 tables. Column names are inconsistent (`created_date` vs. `Create_Date`). The standard `bronze_batch_id` and `valid_from_ts` / `valid_to_ts` naming is not used — instead `effective_from` / `effective_to` is used for SCD2 tables. |
@@ -336,7 +336,7 @@ This sub-area checks adherence to widely accepted Silver-layer best practices in
 | # | Question | Answer / Evidence |
 |---|----------|-------------------|
 | 1 | Is the Silver layer free from business metric calculations and aggregations — i.e., are those deliberately deferred to Gold? | No. `loan.loan_account_master` contains pre-aggregated fields (`MTD_disbursement`, `YTD_disbursement`, `LTD_disbursement`, `interest_paid_itd`, `principal_paid_itd`, `average_balance`) that represent period aggregations. These aggregated values embedded in a contract-level Silver table blur the Silver/Gold boundary and make point-in-time restatement more complex. |
-| 2 | Is there exactly one authoritative Silver table per business entity (e.g., one `silver.customer.party` table), or do multiple tables exist for the same entity leading to inconsistency? | No. Multiple overlapping tables exist for the same entities: Loan contracts are in `finacle.finacle_loan_contract`, `flexcube.flexcube_loan_contract`, `erp.finacle_loan_contract` and `loan.loan_account_master`. Term deposit contracts are in `finacle.finacle_td_contract`, `flexcube.flexcube_td_contract`, `prime4.prime_td_contract`, `deposits.deposit_term_account`. CASA contracts are in `finacle.finacle_casa_contract`, `erp.finacle_casa_contract`, `casa.finacle_contract`. Consumers cannot easily identify the authoritative table for a given entity. |
+| 2 | Is there exactly one authoritative Silver table per business entity (e.g., one `silver.customer.party` table), or do multiple tables exist for the same entity leading to inconsistency? | No. Multiple overlapping tables exist for the same entities: Loan contracts are in `finacle.finacle_loan_contract`, `flexcube.flexcube_loan_contract`, `erp.finacle_loan_contract` and `loan.loan_account_master`. Term deposit contracts are in `finacle.finacle_td_contract`, `flexcube.flexcube_td_contract`, `prime4.prime_td_contract`, `deposits.deposit_term_account`. CASA contracts are in `finacle.finacle_casa_contract`, `erp.finacle_casa_contract`, `casa.finacle_contract`. Consumers cannot easily identify the authoritative table for a given entity. **This problem is compounded by the existence of a second Silver catalog (evidenced by `silver_dev_v2` naming and the `pyhsical_silver_2.csv` artifact) — consumers face two separate Silver environments, further multiplying the ambiguity about which table in which catalog is authoritative.** |
 | 3 | Are data quality rules (not-null, uniqueness, referential integrity, range checks, domain value checks) enforced and logged at the Silver loading step? | Partially. The `control.dq_logs` table exists, suggesting some DQ rule results are logged. A `control.silver_job` and `control.silver_task` orchestration framework is in place. However, the coverage, rule definitions, and failure-handling process are not documented. Critical data type issues (`account_status` as TIMESTAMP, `balance` as BIGINT, amount columns as STRING) suggest that type-level validation is not enforced. |
 | 4 | Is there a reconciliation process validating that record counts and key financial totals (e.g., sum of outstanding balances) in Silver match the source system or Bronze? | No formal reconciliation process exists. There is no documented process or automated check comparing Silver record counts or financial totals against Bronze or source system control totals. |
 | 5 | Is PII masked, tokenised, or encrypted in Silver tables for columns that do not need to be human-readable for analytical purposes (e.g., account number hashing, name masking in non-production environments)? | No. The `customer.customer` table stores `Customer_Full_Name`, `First_Name`, `Last_Name`, `Birth_date`, `ID_number`, `Mobile_Number`, `Phone_Number`, `Address_Line1/2/3` in clear text. No evidence of PII masking or tokenisation in Silver. The `delete_flag` and `Delete_Date` columns suggest logical deletion is handled, but PII protection is not. |
@@ -365,3 +365,58 @@ This sub-area checks adherence to widely accepted Silver-layer best practices in
 | Security & Privacy | 1 | PII stored in clear text with no masking, tokenisation, or column-level access policies. Data classification absent. |
 | Replayability | 2 | SCD2 tables (11 of 148) could be replayed from Bronze; SCD1 tables (majority) may not be. No documented procedure. |
 | **Sub-Area Overall** | 1 | Silver best practices are at the Initial level. The most critical gaps are the absence of PII protection, multiple competing tables for the same entity, and embedded aggregations that blur the Silver/Gold boundary. |
+
+---
+
+## 3.8 Dual Silver Layer Problem
+
+> **⚠️ Critical Finding — Added from artifact evidence and user confirmation**
+
+The platform currently operates **two parallel Silver environments**, which is a fundamental architectural conformance failure and the single highest-risk finding in this assessment.
+
+### Evidence
+
+| Evidence Item | Detail |
+|--------------|--------|
+| Catalog name in `pyhsical_silver.csv` | `silver_dev_v2` — the `_v2` suffix explicitly signals a prior version exists |
+| Second artifact flagged | `pyhsical_silver_2.csv` added by the platform team confirms a second Silver catalog is present and active |
+| ODS vs Analytical co-location | Both ODS-style source schemas (finacle, flexcube, fis, prime4, erp, eximbills — 103 tables) and domain-aligned analytical schemas (customer, account, loan, credit_card — 45 tables) co-exist in a single `silver_dev_v2` catalog, not in separate `silver_ods.*` / `silver_analytical.*` catalogs as defined in the architecture |
+| Architecture prescription | `architecture_patterns.txt` defines: `silver_ods.{source_system}.{schema}_{table}` and `silver_analytical.{domain}.{entity_name}` — neither namespace prefix is used in practice |
+
+### Impact Assessment
+
+| Risk Area | Impact |
+|-----------|--------|
+| Consumer confusion | Downstream teams (Risk, Finance, BBG, WBG) cannot determine which Silver catalog to read from without tribal knowledge |
+| Data inconsistency | The two Silver catalogs may contain different versions of the same entities, leading to conflicting numbers in reports |
+| Single source of truth violation | Directly violates DATA-PRIN-004 (single source of truth mandate) referenced in the architecture patterns document |
+| Pipeline duplication | Pipelines likely run to both Silver catalogs, doubling compute cost and maintenance burden |
+| Governance gap | No documented reconciliation or migration plan between `silver_dev` (v1) and `silver_dev_v2` |
+| Gold layer risk | Gold models reading from the wrong Silver catalog produce incorrect results; if Gold reads from both, definitions diverge |
+
+### Questions
+
+| # | Question | Answer / Evidence |
+|---|----------|-------------------|
+| 1 | What is the purpose of the second Silver catalog — is it a newer version replacing the first, a separate environment (dev/test), or a parallel model for a different use case? | To be confirmed from `pyhsical_silver_2.csv` analysis. Based on naming (`silver_dev_v2`), it appears to be a versioned replacement that has not yet deprecated the original. |
+| 2 | Which Gold models read from which Silver catalog — and is this documented? | Not documented. Critical risk if Gold models read from different Silver catalogs for related metrics. |
+| 3 | Is there a migration plan to consolidate from two Silver catalogs to one? | No migration plan documented. |
+| 4 | Are the table schemas in the two Silver catalogs compatible — do they have the same columns, types, and naming conventions? | Pending analysis of `pyhsical_silver_2.csv`. To be completed once artifact is committed to the branch. |
+| 5 | Is the second Silver catalog (`pyhsical_silver_2.csv`) the production catalog while `silver_dev_v2` is a development/staging catalog — or vice versa? | To be determined from artifact analysis. |
+
+### Recommended Immediate Actions
+
+1. **Declare one catalog as authoritative** — publish a decision record identifying which Silver catalog is the single source of truth.
+2. **Map Gold-to-Silver dependencies** — audit all Gold models to determine which Silver catalog each reads from.
+3. **Freeze new development on the deprecated catalog** — stop adding new tables to whichever Silver version is being superseded.
+4. **Publish a decommission plan** — with milestones for migrating all consumers off the legacy Silver catalog.
+5. **Enforce the architecture namespace** — adopt `silver_ods.*` and `silver_analytical.*` catalog/database naming as prescribed in the ADR to visually separate sub-layers.
+
+### Maturity Score
+
+| Dimension | Score (1–5) | Justification |
+|-----------|-------------|---------------|
+| Single Authoritative Silver | 1 | Two parallel Silver environments with no reconciliation or decommission plan. |
+| Sub-Layer Separation | 1 | ODS and Analytical sub-layers co-located in one catalog without the prescribed namespace separation. |
+| Architecture Conformance | 1 | Catalog naming convention (`silver_ods.*` / `silver_analytical.*`) not implemented. |
+| **Sub-Area Overall** | 1 | Critical failure — this is the most severe architectural finding in the Silver layer assessment. |
