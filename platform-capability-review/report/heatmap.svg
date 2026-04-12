@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1192 960" width="1192" height="960" font-family="Segoe UI, Arial, sans-serif">
+<rect width="1192" height="960" fill="#F5F5F5" rx="12"/>
+<text x="596.0" y="70" text-anchor="middle" font-size="28" font-weight="bold" fill="#1A237E">Data Platform Capability Assessment – Heat Map</text>
+<text x="596.0" y="98" text-anchor="middle" font-size="16" fill="#546E7A">Overall Maturity Score: 1.2 / 5.0</text>
+<text x="596.0" y="120" text-anchor="middle" font-size="13" fill="#78909C">Colour scale: Red (1 – Initial) → Orange (2 – Developing) → Yellow (3 – Defined) → Green (4-5 – Managed/Optimizing)</text>
+<rect x="40" y="150" width="260" height="386" rx="10" fill="#F57C00" stroke="#BDBDBD" stroke-width="1"/>
+<text x="170.0" y="174" text-anchor="middle" font-size="15" font-weight="bold" fill="#212121">Data Integration</text>
+<text x="170.0" y="192" text-anchor="middle" font-size="13" fill="#212121">Domain Score: 1.7</text>
+<rect x="56" y="206" width="228" height="36" rx="6" fill="#F57C00" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="66" y="228" font-size="12" fill="#212121">Event-Driven Integration</text>
+<text x="274" y="228" text-anchor="end" font-size="12" font-weight="bold" fill="#212121">2</text>
+<rect x="56" y="248" width="228" height="36" rx="6" fill="#F57C00" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="66" y="270" font-size="12" fill="#212121">Batch-Driven Integration</text>
+<text x="274" y="270" text-anchor="end" font-size="12" font-weight="bold" fill="#212121">2</text>
+<rect x="56" y="290" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="66" y="312" font-size="12" fill="#FFFFFF">API-Driven Integration</text>
+<text x="274" y="312" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="56" y="332" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="66" y="354" font-size="12" fill="#FFFFFF">Data Virtualization</text>
+<text x="274" y="354" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="56" y="374" width="228" height="36" rx="6" fill="#F57C00" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="66" y="396" font-size="12" fill="#212121">Orchestration</text>
+<text x="274" y="396" text-anchor="end" font-size="12" font-weight="bold" fill="#212121">2</text>
+<rect x="56" y="416" width="228" height="36" rx="6" fill="#F57C00" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="66" y="438" font-size="12" fill="#212121">Data Automation</text>
+<text x="274" y="438" text-anchor="end" font-size="12" font-weight="bold" fill="#212121">2</text>
+<rect x="324" y="150" width="260" height="386" rx="10" fill="#E64A19" stroke="#BDBDBD" stroke-width="1"/>
+<text x="454.0" y="174" text-anchor="middle" font-size="15" font-weight="bold" fill="#FFFFFF">Data Management</text>
+<text x="454.0" y="192" text-anchor="middle" font-size="13" fill="#FFFFFF">Domain Score: 1.4</text>
+<rect x="340" y="206" width="228" height="36" rx="6" fill="#F57C00" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="228" font-size="12" fill="#212121">Data Processing</text>
+<text x="558" y="228" text-anchor="end" font-size="12" font-weight="bold" fill="#212121">2</text>
+<rect x="340" y="248" width="228" height="36" rx="6" fill="#FBC02D" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="270" font-size="12" fill="#212121">Data Storage Management</text>
+<text x="558" y="270" text-anchor="end" font-size="12" font-weight="bold" fill="#212121">3</text>
+<rect x="340" y="290" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="312" font-size="12" fill="#FFFFFF">Data Modeling</text>
+<text x="558" y="312" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="340" y="332" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="354" font-size="12" fill="#FFFFFF">DataOps</text>
+<text x="558" y="354" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="340" y="374" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="396" font-size="12" fill="#FFFFFF">ML / AI Model Mgmt</text>
+<text x="558" y="396" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="340" y="416" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="438" font-size="12" fill="#FFFFFF">Self-Service Data Prep</text>
+<text x="558" y="438" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="340" y="458" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="480" font-size="12" fill="#FFFFFF">Data Product Mgmt</text>
+<text x="558" y="480" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="608" y="150" width="260" height="386" rx="10" fill="#D32F2F" stroke="#BDBDBD" stroke-width="1"/>
+<text x="738.0" y="174" text-anchor="middle" font-size="15" font-weight="bold" fill="#FFFFFF">Data Quality</text>
+<text x="738.0" y="192" text-anchor="middle" font-size="15" font-weight="bold" fill="#FFFFFF">Management</text>
+<text x="738.0" y="210" text-anchor="middle" font-size="13" fill="#FFFFFF">Domain Score: 1.0</text>
+<rect x="624" y="224" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="634" y="246" font-size="12" fill="#FFFFFF">Profiling</text>
+<text x="842" y="246" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="624" y="266" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="634" y="288" font-size="12" fill="#FFFFFF">DQ Rules Management</text>
+<text x="842" y="288" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="624" y="308" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="634" y="330" font-size="12" fill="#FFFFFF">DQ Monitoring</text>
+<text x="842" y="330" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="624" y="350" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="634" y="372" font-size="12" fill="#FFFFFF">Data Observability</text>
+<text x="842" y="372" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="892" y="150" width="260" height="386" rx="10" fill="#D32F2F" stroke="#BDBDBD" stroke-width="1"/>
+<text x="1022.0" y="174" text-anchor="middle" font-size="15" font-weight="bold" fill="#FFFFFF">Analytics</text>
+<text x="1022.0" y="192" text-anchor="middle" font-size="13" fill="#FFFFFF">Domain Score: 1.0</text>
+<rect x="908" y="206" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="918" y="228" font-size="12" fill="#FFFFFF">Data Marketplace</text>
+<text x="1126" y="228" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="908" y="248" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="918" y="270" font-size="12" fill="#FFFFFF">Data Visualization</text>
+<text x="1126" y="270" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="908" y="290" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="918" y="312" font-size="12" fill="#FFFFFF">Exploratory Data Analysis</text>
+<text x="1126" y="312" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="908" y="332" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="918" y="354" font-size="12" fill="#FFFFFF">Self-Service Analytics</text>
+<text x="1126" y="354" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="40" y="560" width="260" height="260" rx="10" fill="#F57C00" stroke="#BDBDBD" stroke-width="1"/>
+<text x="170.0" y="584" text-anchor="middle" font-size="15" font-weight="bold" fill="#212121">Metadata</text>
+<text x="170.0" y="602" text-anchor="middle" font-size="15" font-weight="bold" fill="#212121">Management</text>
+<text x="170.0" y="620" text-anchor="middle" font-size="13" fill="#212121">Domain Score: 1.7</text>
+<rect x="56" y="634" width="228" height="36" rx="6" fill="#F57C00" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="66" y="656" font-size="12" fill="#212121">Data Catalog</text>
+<text x="274" y="656" text-anchor="end" font-size="12" font-weight="bold" fill="#212121">2</text>
+<rect x="56" y="676" width="228" height="36" rx="6" fill="#F57C00" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="66" y="698" font-size="12" fill="#212121">Data Discovery</text>
+<text x="274" y="698" text-anchor="end" font-size="12" font-weight="bold" fill="#212121">2</text>
+<rect x="56" y="718" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="66" y="740" font-size="12" fill="#FFFFFF">Lineage & Impact Analysis</text>
+<text x="274" y="740" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="324" y="560" width="260" height="260" rx="10" fill="#D32F2F" stroke="#BDBDBD" stroke-width="1"/>
+<text x="454.0" y="584" text-anchor="middle" font-size="15" font-weight="bold" fill="#FFFFFF">Security &</text>
+<text x="454.0" y="602" text-anchor="middle" font-size="15" font-weight="bold" fill="#FFFFFF">Compliance</text>
+<text x="454.0" y="620" text-anchor="middle" font-size="13" fill="#FFFFFF">Domain Score: 1.0</text>
+<rect x="340" y="634" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="656" font-size="12" fill="#FFFFFF">Data Privacy Mgmt</text>
+<text x="558" y="656" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="340" y="676" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="698" font-size="12" fill="#FFFFFF">Data Protection</text>
+<text x="558" y="698" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="340" y="718" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="740" font-size="12" fill="#FFFFFF">Access Governance</text>
+<text x="558" y="740" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="340" y="760" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="350" y="782" font-size="12" fill="#FFFFFF">Audit Management</text>
+<text x="558" y="782" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="608" y="560" width="260" height="260" rx="10" fill="#D32F2F" stroke="#BDBDBD" stroke-width="1"/>
+<text x="738.0" y="584" text-anchor="middle" font-size="15" font-weight="bold" fill="#FFFFFF">Data Governance</text>
+<text x="738.0" y="602" text-anchor="middle" font-size="13" fill="#FFFFFF">Domain Score: 1.0</text>
+<rect x="624" y="616" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="634" y="638" font-size="12" fill="#FFFFFF">Data Strategy Mgmt</text>
+<text x="842" y="638" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="624" y="658" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="634" y="680" font-size="12" fill="#FFFFFF">Data Standards Mgmt</text>
+<text x="842" y="680" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="624" y="700" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="634" y="722" font-size="12" fill="#FFFFFF">Data Stewardship</text>
+<text x="842" y="722" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="892" y="560" width="260" height="260" rx="10" fill="#D32F2F" stroke="#BDBDBD" stroke-width="1"/>
+<text x="1022.0" y="584" text-anchor="middle" font-size="15" font-weight="bold" fill="#FFFFFF">Supporting</text>
+<text x="1022.0" y="602" text-anchor="middle" font-size="15" font-weight="bold" fill="#FFFFFF">Technology</text>
+<text x="1022.0" y="620" text-anchor="middle" font-size="13" fill="#FFFFFF">Domain Score: 1.0</text>
+<rect x="908" y="634" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="918" y="656" font-size="12" fill="#FFFFFF">Platform Monitoring</text>
+<text x="1126" y="656" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="908" y="676" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="918" y="698" font-size="12" fill="#FFFFFF">Automation & CI/CD</text>
+<text x="1126" y="698" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="908" y="718" width="228" height="36" rx="6" fill="#D32F2F" stroke="#E0E0E0" stroke-width="0.5"/>
+<text x="918" y="740" font-size="12" fill="#FFFFFF">Development Practices</text>
+<text x="1126" y="740" text-anchor="end" font-size="12" font-weight="bold" fill="#FFFFFF">1</text>
+<rect x="90" y="854" width="90" height="28" rx="4" fill="#D32F2F"/>
+<text x="135.0" y="872" text-anchor="middle" font-size="11" fill="#FFFFFF">1 Initial</text>
+<rect x="186" y="854" width="90" height="28" rx="4" fill="#E64A19"/>
+<rect x="282" y="854" width="90" height="28" rx="4" fill="#F57C00"/>
+<text x="327.0" y="872" text-anchor="middle" font-size="11" fill="#212121">2 Developing</text>
+<rect x="378" y="854" width="90" height="28" rx="4" fill="#FFA000"/>
+<rect x="474" y="854" width="90" height="28" rx="4" fill="#FBC02D"/>
+<text x="519.0" y="872" text-anchor="middle" font-size="11" fill="#212121">3 Defined</text>
+<rect x="570" y="854" width="90" height="28" rx="4" fill="#CDDC39"/>
+<rect x="666" y="854" width="90" height="28" rx="4" fill="#8BC34A"/>
+<text x="711.0" y="872" text-anchor="middle" font-size="11" fill="#212121">4 Managed</text>
+<rect x="762" y="854" width="90" height="28" rx="4" fill="#4CAF50"/>
+<rect x="858" y="854" width="90" height="28" rx="4" fill="#2E7D32"/>
+<text x="903.0" y="872" text-anchor="middle" font-size="11" fill="#212121">5 Optimizing</text>
+</svg>
