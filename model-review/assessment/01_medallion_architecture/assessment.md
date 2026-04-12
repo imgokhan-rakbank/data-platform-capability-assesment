@@ -62,6 +62,8 @@ This sub-area examines whether each layer has a precisely defined, agreed-upon r
 | 6 | Is data duplication across layers intentional and documented (e.g., a table replicated from Silver to Gold for performance), or is it accidental? | No documentation |
 | 7 | How are late-arriving data, restatements, and corrections handled — and is the handling policy documented per layer? |No documentation or process exists |
 | 8 | Are there clearly defined owners (teams or individuals) for each layer, and are those owners accountable for model quality and SLAs? | There are owners but nothing is clear |
+| **9** | **Is there a single, authoritative Silver catalog / environment — or do multiple Silver catalogs / databases exist in parallel (e.g., silver_dev, silver_dev_v2, silver_prod)?** | **Critical gap: Two Silver layers currently exist in parallel. The physical model export from `silver_dev_v2` (148 tables across 17 schemas) reveals a `_v2` versioned catalog, implying a prior `silver_dev` or equivalent catalog still exists and may be actively used. A second physical model export (`pyhsical_silver_2.csv`) has been flagged as evidence of the second Silver environment. The two catalogs have not been reconciled or consolidated — creating ambiguity about which Silver is the single source of truth for consumers.** |
+| **10** | **Are the two Silver sub-layers (Silver ODS and Silver Analytical) physically separated into distinct catalogs/databases as defined in the architecture, or co-located in a single catalog?** | **Architecture patterns define two distinct namespaces: `silver_ods.{source_system}.*` and `silver_analytical.{domain}.*`. In practice, both co-exist in a single catalog (`silver_dev_v2`) under different schema names — source-specific schemas (finacle, flexcube, fis, prime4, erp, eximbills) represent the ODS sub-layer (103 tables), while domain-named schemas (customer, account, loan, credit_card) represent the analytical sub-layer (45 tables). The prescribed `silver_ods.*` and `silver_analytical.*` prefix namespaces are not used, making it impossible to determine a table's sub-layer from its catalog path alone.** |
 
 ### Solution Mapping
 
@@ -71,7 +73,7 @@ This sub-area examines whether each layer has a precisely defined, agreed-upon r
 | Owner of Bronze | Data platform |
 | Owner of Silver | Data platform|
 | Owner of Gold | Use case platform|
-| Known Gaps / Limitations | Documentation is basic, not communicated well, nothing is enforced|
+| Known Gaps / Limitations | Documentation is basic, not communicated well, nothing is enforced. **Critical: Two Silver catalogs exist in parallel (`silver_dev_v2` and at least one other), creating ambiguity about which is authoritative. The Silver ODS / Silver Analytical sub-layer boundary is architecturally defined but not physically enforced through separate catalog namespacing.** |
 
 ### Maturity Score
 
@@ -80,7 +82,8 @@ This sub-area examines whether each layer has a precisely defined, agreed-upon r
 | Conceptual Clarity | 2 | Basic definitions exist, but not enforced or communicated. |
 | Documentation Quality | 2 | Documentation is basic, not communicated, and not enforced. |
 | Ownership & Accountability | 2 | Owners exist, but roles and accountability are unclear. |
-| **Sub-Area Overall** | 2 | Some structure, but mostly "Developing" maturity. |
+| Single Authoritative Layer | 1 | Two Silver catalogs in parallel with no reconciliation plan is a critical gap. Consumers cannot identify which catalog is authoritative. |
+| **Sub-Area Overall** | 1 | The existence of two parallel Silver environments reduces this from Developing to Initial — a fundamental architectural conformance failure. |
 
 ---
 
