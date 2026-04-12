@@ -24,7 +24,7 @@ Conceptual design at Gold defines the reporting domains, key metrics, and aggreg
 
 | # | Question | Answer / Evidence |
 |---|----------|-------------------|
-| 1 | Is there a conceptual catalogue of Gold-layer reporting subjects — i.e., a list of all data marts, reporting datasets, or presentation tables that exist or are planned? | |
+| 1 | Is there a conceptual catalogue of Gold-layer reporting subjects — i.e., a list of all data marts, reporting datasets, or presentation tables that exist or are planned? | Not communicated |
 | 2 | Are the following **risk and regulatory reporting subjects** defined in the Gold conceptual model? For each, state whether it exists, is planned, or is absent: | |
 |   | – Credit Risk Dashboard (portfolio quality, NPL ratio, coverage ratio) | |
 |   | – IFRS 9 / ECL Reporting (ECL by stage, provision movement, sensitivities) | |

@@ -41,13 +41,10 @@
 
 | ID | Backlog Item | Priority | Domain | Current Gap |
 |----|-------------|----------|--------|-------------|
-| B-GOV-01 | Establish a Data Governance Council with executive sponsorship and defined charter | P1 | Data Governance | No governance body exists |
-| B-GOV-02 | Define and approve a Data Strategy document aligned to business objectives | P1 | Data Governance | No data strategy defined |
-| B-GOV-03 | Define a data operating model (centralised, federated, or hybrid) | P1 | Data Governance | No operating model documented |
-| B-GOV-04 | Identify and document Critical Data Elements (CDEs) for the top 5 data domains | P1 | Data Governance | No CDEs identified |
-| B-GOV-05 | Define and publish naming conventions for databases, tables, columns, and pipelines | P1 | Data Governance | No naming conventions |
-| B-GOV-06 | Assign data steward roles for the top 3 critical data domains | P2 | Data Governance | No stewards assigned |
-| B-GOV-07 | Establish a data classification standard (Public, Internal, Confidential, Restricted) | P1 | Data Governance | No classification standards |
+| B-GOV-01 | Define a data operating model (centralised, federated, or hybrid) | P1 | Data Governance | No operating model documented |
+| B-GOV-02 | Identify and document Critical Data Elements (CDEs) for the top 5 data domains | P1 | Data Governance | No CDEs identified |
+| B-GOV-03 | Define and publish naming conventions for databases, tables, columns, and pipelines | P1 | Data Governance | No naming conventions |
+| B-GOV-04 | Assign data steward roles for the top 3 critical data domains | P2 | Data Governance | No stewards assigned |
 
 ### Data Quality Management (Current: 1.0 → Target: 2.0)
 
@@ -79,7 +76,7 @@
 | B-TECH-02 | Implement infrastructure metrics collection for all data platform components | P1 | Supporting Tech | No metrics collected |
 | B-TECH-03 | Define and configure basic alerting rules with severity levels and escalation paths | P1 | Supporting Tech | No alerting rules |
 | B-TECH-04 | Document a development workflow and branching strategy for data pipelines | P2 | Supporting Tech | No dev workflow |
-| B-TECH-05 | Introduce mandatory peer code review for all data platform changes | P2 | Supporting Tech | Code review not mandatory |
+| B-TECH-05 | Introduce mandatory peer code (AI-assisted) review for all data platform changes | P2 | Supporting Tech | Code review not mandatory |
 | B-TECH-06 | Define and publish coding standards for SQL, Python, and PySpark | P2 | Supporting Tech | No coding standards |
 | B-TECH-07 | Create on-call schedule and basic incident response runbook | P2 | Supporting Tech | No incident response |
 
@@ -87,7 +84,7 @@
 
 | ID | Backlog Item | Priority | Domain | Current Gap |
 |----|-------------|----------|--------|-------------|
-| B-INT-01 | Migrate CDC connectors from primary to replica database instances | P1 | Data Integration | CDC on primary causes issues |
+| B-INT-01 | Migrate CDC connectors from primary to replica database instances when possible | P1 | Data Integration | CDC on primary causes issues |
 | B-INT-02 | Implement monitoring and alerting for all CDC connectors and Kafka topics | P1 | Data Integration | No monitoring exists |
 | B-INT-03 | Create an inventory and documentation of all active batch pipelines | P2 | Data Integration | Pipelines not documented |
 | B-INT-04 | Define and document the data integration onboarding process | P2 | Data Integration | Process not defined |
@@ -97,9 +94,10 @@
 | ID | Backlog Item | Priority | Domain | Current Gap |
 |----|-------------|----------|--------|-------------|
 | B-MGT-01 | Define clear rules and expectations for each medallion layer (Bronze/Silver/Gold) | P1 | Data Management | Rules not defined |
-| B-MGT-02 | Document data processing pipeline development standards and patterns | P2 | Data Management | No standards exist |
-| B-MGT-03 | Implement cost tagging for all Databricks and ADF resources | P2 | Data Management | No cost management |
-| B-MGT-04 | Define and document a late-arriving data handling strategy | P2 | Data Management | Not defined |
+| B-MGT-02 | Implement base-line silver layer | P1 | Data Management | Silver layer coverage lacks unified concepts |
+| B-MGT-03 | Document data processing pipeline development standards and patterns | P2 | Data Management | No standards exist |
+| B-MGT-04 | Implement cost tagging for all Databricks and ADF resources | P2 | Data Management | No cost management |
+| B-MGT-05 | Define and document a late-arriving data handling strategy | P2 | Data Management | Not defined |
 
 ### Metadata Management (Current: 1.7 → Target: 2.0)
 
@@ -122,8 +120,7 @@
 | S-GOV-02 | Define and enforce data format and encoding standards (date/time, currency, IDs) | P2 | Data Governance | B-GOV-05 |
 | S-GOV-03 | Implement a reference data management process for code sets and lookup values | P2 | Data Governance | B-GOV-04 |
 | S-GOV-04 | Publish data standards in an accessible portal with change management process | P3 | Data Governance | B-GOV-05 |
-| S-GOV-05 | Launch a data literacy programme aligned to the data strategy | P3 | Data Governance | B-GOV-02 |
-| S-GOV-06 | Embed data standards compliance checks into CI/CD pipelines | P2 | Data Governance | B-GOV-05, S-TECH-01 |
+| S-GOV-05 | Embed data standards compliance checks into CI/CD pipelines | P2 | Data Governance | B-GOV-05, S-TECH-01 |
 
 ### Data Quality Management (Target: 3.0)
 
@@ -143,7 +140,7 @@
 | S-SEC-01 | Implement dynamic data masking for sensitive fields in analytics environments | P1 | Security | B-SEC-02 |
 | S-SEC-02 | Deploy tokenisation/pseudonymisation for PII in non-production environments | P2 | Security | B-SEC-02 |
 | S-SEC-03 | Automate access provisioning and implement periodic access recertification | P2 | Security | B-SEC-06 |
-| S-SEC-04 | Centralise audit logs in a SIEM platform (e.g., Microsoft Sentinel) | P2 | Security | B-SEC-04 |
+| S-SEC-04 | Centralise audit logs in a SIEM platform | P2 | Security | B-SEC-04 |
 | S-SEC-05 | Implement privileged access management (JIT access for DBA/admin roles) | P2 | Security | B-SEC-06 |
 | S-SEC-06 | Conduct Privacy Impact Assessments (PIAs) for all new data processing activities | P2 | Security | B-SEC-01 |
 
@@ -184,8 +181,7 @@
 |----|-------------|----------|--------|------------|
 | S-ANA-01 | Deploy a semantic layer / metric definitions for consistent reporting | P2 | Analytics | S-MGT-01 |
 | S-ANA-02 | Define and publish dashboard development standards (naming, UX guidelines) | P3 | Analytics | – |
-| S-ANA-03 | Pilot self-service analytics with 2-3 business teams using Power BI datasets | P3 | Analytics | S-ANA-01 |
-| S-ANA-04 | Onboard first EDA users into sandbox environment with access guardrails | P3 | Analytics | B-SEC-06 |
+| S-ANA-03 | Onboard first EDA users into sandbox environment with access guardrails | P3 | Analytics | B-SEC-06 |
 
 ### Metadata Management (Target: 3.0)
 
@@ -204,10 +200,8 @@
 
 | ID | Backlog Item | Priority | Domain | Dependency |
 |----|-------------|----------|--------|------------|
-| G-GOV-01 | Track data strategy objectives with measurable KPIs; report to governance council quarterly | P2 | Data Governance | S-GOV-01 |
-| G-GOV-02 | Implement automated data standards compliance enforcement across all pipelines | P2 | Data Governance | S-GOV-06 |
-| G-GOV-03 | Track stewardship activity metrics (issues resolved, glossary terms maintained, DQ scores) | P3 | Data Governance | S-GOV-01 |
-| G-GOV-04 | Embed stewardship in job descriptions and performance objectives | P3 | Data Governance | S-GOV-01 |
+| G-GOV-01 | Implement automated data standards compliance enforcement across all pipelines | P2 | Data Governance | S-GOV-06 |
+| G-GOV-02 | Track stewardship activity metrics (issues resolved, glossary terms maintained, DQ scores) | P3 | Data Governance | S-GOV-01 |
 
 ### Data Quality Management (Target: 4.0)
 

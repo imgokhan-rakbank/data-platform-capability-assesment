@@ -24,47 +24,47 @@ Conceptual design at Silver defines the subject areas, their boundaries, and the
 
 | # | Question | Answer / Evidence |
 |---|----------|-------------------|
-| 1 | Is there a documented conceptual data model (entity-relationship diagram or subject area map) for the Silver layer covering the core banking domain? | |
-| 2 | Are the following **foundational banking subject areas** explicitly represented in the Silver conceptual model? For each, state whether it exists, is planned, or is absent: | |
-|   | – **Party / Customer** (individual and corporate counterparties, identity, KYC attributes) | |
-|   | – **Product** (product catalogue, product hierarchy, product parameters) | |
-|   | – **Account** (all account types: current, savings, loan, card, investment, trade finance) | |
-|   | – **Transaction** (financial transactions, movements, postings) | |
-|   | – **Contract / Agreement** (loan agreements, credit facilities, term deposits, trade finance contracts) | |
-|   | – **Channel** (branch, digital, ATM, call centre — interaction and event data) | |
-|   | – **Reference Data** (currencies, countries, industry codes, rate types, GL codes, regulatory codes) | |
-|   | – **General Ledger / Finance** (GL entries, cost centres, P&L lines) | |
-|   | – **Collateral** (collateral types, valuations, collateral-to-facility linkages) | |
-|   | – **Risk – Credit** (credit ratings, probability of default, exposure at default, loss given default, expected credit loss) | |
-|   | – **Risk – Market** (positions, valuations, VaR inputs, interest rate sensitivity) | |
-|   | – **Risk – Liquidity** (liquidity ratios, LCR/NSFR components, cash flow projections) | |
-|   | – **Risk – Operational** (incident register, loss events, controls register) | |
-|   | – **Regulatory / Compliance** (CBUAE / Basel III reporting entities, regulatory classifications, AML flags) | |
-|   | – **Employee / HR** (supporting internal fraud and access risk) | |
-| 3 | Are subject area boundaries clearly defined to prevent overlap — e.g., is it clear whether a "card" is an Account or a Product, and how a card Transaction relates to both? | |
-| 4 | Is there a defined integration model showing how subject areas relate to each other (e.g., Party linked to Account, Account linked to Transaction, Collateral linked to Contract)? | |
-| 5 | Are subject areas versioned and is there a process for adding new subject areas as business needs evolve? | |
-| 6 | Is there a documented maturity level per subject area — distinguishing between foundational coverage (core attributes) and extended coverage (advanced analytics / risk attributes)? | |
-| 7 | Are banking-specific modelling patterns (e.g., party role model, product hierarchy, financial instrument classification per IFRS 9) applied in the conceptual design? | |
+| 1 | Is there a documented conceptual data model (entity-relationship diagram or subject area map) for the Silver layer covering the core banking domain? | Exists for some domains, but not comprehensive or up-to-date for all areas. |
+| 2 | Are the following **foundational banking subject areas** explicitly represented in the Silver conceptual model? For each, state whether it exists, is planned, or is absent: | Partial. Some subject areas exist, but Product, Event/Transaction, and Party are not unified; sub-types do not exist. |
+|   | – **Party / Customer** (individual and corporate counterparties, identity, KYC attributes) | Exists, but not unified; no sub-type structure. |
+|   | – **Product** (product catalogue, product hierarchy, product parameters) | Does not really exist in a unified manner. |
+|   | – **Account** (all account types: current, savings, loan, card, investment, trade finance) | Exists. |
+|   | – **Transaction** (financial transactions, movements, postings) | Exists, but system-specific; no unified parent. |
+|   | – **Contract / Agreement** (loan agreements, credit facilities, term deposits, trade finance contracts) | Exists. |
+|   | – **Channel** (branch, digital, ATM, call centre — interaction and event data) | Exists. |
+|   | – **Reference Data** (currencies, countries, industry codes, rate types, GL codes, regulatory codes) | Exists. |
+|   | – **General Ledger / Finance** (GL entries, cost centres, P&L lines) | Exists. |
+|   | – **Collateral** (collateral types, valuations, collateral-to-facility linkages) | Exists. |
+|   | – **Risk – Credit** (credit ratings, probability of default, exposure at default, loss given default, expected credit loss) | Exists. |
+|   | – **Risk – Market** (positions, valuations, VaR inputs, interest rate sensitivity) | Planned. |
+|   | – **Risk – Liquidity** (liquidity ratios, LCR/NSFR components, cash flow projections) | Planned. |
+|   | – **Risk – Operational** (incident register, loss events, controls register) | Absent. |
+|   | – **Regulatory / Compliance** (CBUAE / Basel III reporting entities, regulatory classifications, AML flags) | Exists. |
+|   | – **Employee / HR** (supporting internal fraud and access risk) | Absent. |
+| 3 | Are subject area boundaries clearly defined to prevent overlap — e.g., is it clear whether a "card" is an Account or a Product, and how a card Transaction relates to both? | Partially defined; some overlaps and ambiguities remain. |
+| 4 | Is there a defined integration model showing how subject areas relate to each other (e.g., Party linked to Account, Account linked to Transaction, Collateral linked to Contract)? | Exists for core entities, but not for all subject areas. |
+| 5 | Are subject areas versioned and is there a process for adding new subject areas as business needs evolve? | Versioning is done manually in SharePoint; no easy collaboration or formal process. |
+| 6 | Is there a documented maturity level per subject area — distinguishing between foundational coverage (core attributes) and extended coverage (advanced analytics / risk attributes)? | No. |
+| 7 | Are banking-specific modelling patterns (e.g., party role model, product hierarchy, financial instrument classification per IFRS 9) applied in the conceptual design? | Partially applied for core domains. |
 
 ### Solution Mapping
 
 | Aspect | Details |
 |--------|---------|
-| Conceptual Model / Diagram Location | |
-| Subject Areas Currently Implemented | |
-| Subject Areas Planned / In Progress | |
-| Subject Areas Missing / Gaps | |
-| Known Gaps / Limitations | |
+| Conceptual Model / Diagram Location | SharePoint (manual versioning, not collaborative) |
+| Subject Areas Currently Implemented | Party, Account, Transaction (system-specific), Contract, Channel, Reference Data, GL/Finance, Collateral, Risk – Credit, Regulatory/Compliance |
+| Subject Areas Planned / In Progress | Risk – Market, Risk – Liquidity |
+| Subject Areas Missing / Gaps | Product (unified), Event/Transaction (unified), Risk – Operational, Employee/HR |
+| Known Gaps / Limitations | No unified models for Product/Event/Party; no sub-type structure; manual versioning; not all boundaries are clear. |
 
 ### Maturity Score
 
 | Dimension | Score (1–5) | Justification |
 |-----------|-------------|---------------|
-| Conceptual Modelling | | |
-| Banking Domain Coverage (Foundational) | | |
-| Banking Domain Coverage (Risk & Extended) | | |
-| **Sub-Area Overall** | | |
+| Conceptual Modelling | 2 | Some models exist, but not comprehensive, unified, or consistently maintained. |
+| Banking Domain Coverage (Foundational) | 2 | Most foundational subject areas exist, but Product/Event/Party are not unified; sub-types do not exist. |
+| Banking Domain Coverage (Risk & Extended) | 2 | Risk and extended domains are planned or absent; not fully covered. |
+| **Sub-Area Overall** | 2 | Coverage is partial; foundational areas are better represented than extended, but lack of unification and formal process is a major gap. |
 
 ---
 

@@ -16,16 +16,16 @@ Modelling standards and governance are the backbone of a scalable, maintainable 
 
 | # | Question | Answer / Evidence |
 |---|----------|-------------------|
-| 1 | Is there a written naming convention standard that covers: database/schema names, table names, column names, view names, and temporary/staging objects — for all three layers (Bronze, Silver, Gold)? | |
-| 2 | Does the naming convention prescribe the layer prefix or namespace (e.g., `bronze.`, `silver.`, `gold.`) — and is this consistently applied so that the layer of any object is immediately apparent from its name alone? | |
-| 3 | Are there rules for abbreviations — i.e., a standard abbreviation dictionary that prevents different engineers from abbreviating the same word differently (e.g., `amt` vs. `amount` vs. `amnt`)? | |
-| 4 | Is snake_case enforced as the column naming style across all layers? Are mixed cases (camelCase, PascalCase) present in the current model? | |
-| 5 | Are boolean column names prefixed with `is_` or `has_` (e.g., `is_active`, `has_collateral`) consistently? | |
-| 6 | Are date columns suffixed with `_date`, timestamp columns with `_ts` or `_timestamp`, and amount columns with `_amount` or `_amt` — and is this applied uniformly? | |
-| 7 | Are primary key columns named consistently across entities (e.g., `<entity>_id` or `<entity>_key` throughout)? | |
-| 8 | Are foreign key columns named after the referenced entity and key (e.g., `party_id` in an account table referencing the party table)? | |
-| 9 | Is there an automated linter or CI check that validates naming conventions before code is merged? | |
-| 10 | What percentage of existing Silver and Gold tables are compliant with the current naming standard — has a compliance audit been done? | |
+| 1 | Is there a written naming convention standard that covers: database/schema names, table names, column names, view names, and temporary/staging objects — for all three layers (Bronze, Silver, Gold)? | Documented at architecute documents but not governen, not detailed not enforced |
+| 2 | Does the naming convention prescribe the layer prefix or namespace (e.g., `bronze.`, `silver.`, `gold.`) — and is this consistently applied so that the layer of any object is immediately apparent from its name alone? | Yes |
+| 3 | Are there rules for abbreviations — i.e., a standard abbreviation dictionary that prevents different engineers from abbreviating the same word differently (e.g., `amt` vs. `amount` vs. `amnt`)? | No |
+| 4 | Is snake_case enforced as the column naming style across all layers? Are mixed cases (camelCase, PascalCase) present in the current model? | No enforcement but snale case is followed |
+| 5 | Are boolean column names prefixed with `is_` or `has_` (e.g., `is_active`, `has_collateral`) consistently? | No standards |
+| 6 | Are date columns suffixed with `_date`, timestamp columns with `_ts` or `_timestamp`, and amount columns with `_amount` or `_amt` — and is this applied uniformly? | No standards |
+| 7 | Are primary key columns named consistently across entities (e.g., `<entity>_id` or `<entity>_key` throughout)? | No standards |
+| 8 | Are foreign key columns named after the referenced entity and key (e.g., `party_id` in an account table referencing the party table)? | No standards |
+| 9 | Is there an automated linter or CI check that validates naming conventions before code is merged? | No |
+| 10 | What percentage of existing Silver and Gold tables are compliant with the current naming standard — has a compliance audit been done? | Not known |
 
 ### Solution Mapping
 
