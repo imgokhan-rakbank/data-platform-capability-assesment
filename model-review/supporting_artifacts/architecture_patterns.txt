@@ -1,0 +1,212 @@
+PATTERN-001 — Medallion Architecture (Bronze/Silver/Gold)
+Name
+Medallion Architecture for Enterprise Data Platform
+
+Problem
+
+RAKBANK needs a structured, scalable data architecture that:
+
+Supports both operational and analytical workloads
+Maintains data quality and governance across processing stages
+Enables incremental refinement from raw to business-ready data
+Provides clear separation of concerns between ingestion, processing, and consumption
+Ensures regulatory compliance and audit traceability
+Optimizes cloud storage costs through tiered data management
+Without a structured approach, data lakes become data swamps with:
+
+Duplicate data copies across business units
+Inconsistent quality and transformations
+Unclear data lineage and ownership
+High cloud storage costs from redundant datasets
+Difficulty meeting regulatory requirements (SupTech, Basel III, IFRS 9)
+Context
+
+Environment
+
+Platform: Azure Databricks on RAKBANK private tenant (UAE North region)
+Storage: Azure Data Lake Storage Gen2 (ADLS)
+Data Governance: Informatica Cloud, Unity Catalog
+Source Systems: 30+ systems (Finacle, Prime, Oracle, MS SQL, PostgreSQL, DB2)
+Data Volume: 2TB/month from core systems
+Retention: 7 years across all layers
+Network: 400 Mbps ExpressRoute (on-premise to Azure)
+Regulatory Context
+
+CBUAE Data Residency requirements
+CBUAE SupTech reporting requirements
+Basel III risk reporting
+IFRS 9 financial reporting
+PCI DSS v4 compliance for Card Data
+7-year data retention mandates
+Organizational Context
+
+Centralized Data Platforms team ownership
+Multiple consuming teams (Risk, Finance, BBG, WBG)
+Mix of operational (real-time) and analytical (batch) workloads
+Forces
+
+Technical Forces
+
+Limited bandwidth (400 Mbps) between on-premise and Azure favors streaming over large batches
+Limited watermark columns in several systems
+Limited time available for nightly batch reloads
+Mixed latency requirements: real-time operational reporting vs. batch analytical processing
+Schema evolution from source systems must be managed without breaking consumers
+Business Forces
+
+Regulatory compliance is non-negotiable and requires full lineage traceability
+Multiple business domains (Retail, Business, Wholesale Banking, Finance) need consistent data
+Time-to-insight for business users must be minimized
+Self-service analytics requires clean, governed, documented datasets
+Architectural Forces
+
+Single source of truth mandate per DATA-PRIN-004
+No data silos per EA-PRIN-009 and DATA-PRIN-006
+Cost-aware design per DATA-PRIN-008
+AI-ready foundation per EA-PRIN-017 and DATA-PRIN-009
+
+Why Medallion vs. Alternatives?
+
+Alternative 1: Single-Layer Data Lake
+
+Single layer mixes raw and refined data, complicating governance
+No clear boundary for data quality validation
+Difficult to troubleshoot processing issues
+Alternative 1: Two-Layer (Staging + Production)
+
+Doesn't provide separation between operational and analytical needs
+No intermediate layer for progressive refinement
+Forces "one size fits all" transformation approach
+Why These Specific Layer Definitions?
+
+Bronze = Immutable Source Copy
+
+Provides audit trail and replay capability
+Isolates source system changes from downstream
+Enables fast ingestion without processing delays
+Silver = Dual-Purpose (ODS + Analytical)
+
+ODS: Serves operational needs (current state, fast access)
+Analytical: Serves analytics needs (history, conformance, quality)
+This split avoids forcing all use cases through single transformation path
+Gold = Consumption-Optimized
+
+Pre-aggregation for known patterns (regulatory, management KPIs)
+Dimensional models for flexible analysis
+Multiple Gold schemas support different consumption needs without duplication
+
+
+
+Layer 1: Bronze (Raw Ingestion)
+
+Purpose: Create an immutable, append-only copy of source system data
+
+Characteristics
+
+Schema: Preserve source system schema exactly as-is
+Format: Delta Lake tables (Parquet + transaction log)
+Data Quality: No transformations, no validation, accept all data
+Structure: bronze.{source_system}.{schema}_{table_name}
+Partitioning: By ingestion timestamp and/or source system natural keys
+Retention: 7 years (full history)
+Updates: Append-only via UPSERT (merge) based on source CDC operations
+Data Flow
+
+Streaming: Confluent Kafka → ADLS → Databricks Autoloader → Bronze Delta Tables
+Batch: ADF → ADLS → ADF Pipeline → Bronze Delta Tables
+Quality Approach
+
+No rejection: All data lands in Bronze regardless of quality
+Benefits
+
+Full historical record for compliance and audit
+Replay capability if downstream processing needs correction
+Schema evolution isolated at source boundary
+Fast ingestion without processing bottlenecks
+Layer 2: Silver (Refined & Conformed)
+
+Purpose: Create cleansed, conformed, and governed enterprise datasets. This will be the place where the Databricks ODS will sit and also the Domain-Driven Enterprise Data Model
+
+Characteristics
+
+Schema: Conformed to the ODS and Domain-Driven Enterprise Data Model standards
+Format: Delta Lake tables with enforced schemas
+Data Quality: Validation rules applied, bad data quarantined
+Structure: Two logical sub-layers:
+Silver ODS: silver_ods.{source_system}.{schema}_{table_name}
+Silver Analytical: silver_analytical.{domain}.{entity_name}
+Retention: 7 years
+Updates: UPSERT for ODS (SCD Type 1), MERGE for analytical (SCD Type 2)
+Silver ODS (Operational Data Store) - Refers PATTERN-05: Multi-Tier Operation Data Store (ODS).
+
+Silver Analytical (Enterprise Conformance) - Refers PATTERN-06: Domain Driven Enterprise Data Model
+
+Layer 3: Gold (Business-Ready) - Refers PATTERN-07: Dimensional Modeling using the Kimball Methodology
+
+Purpose: Deliver consumption-ready datasets optimized for specific business use cases
+
+Characteristics
+
+Schema: Dimensional models (star/snowflake), aggregates, or denormalized views
+Format: Delta Lake tables optimized for query performance
+Structure: Organized by consumption pattern or business unit:
+SupTech: gold_suptech.{framework}.{report_name}
+Risk: gold_risk.{domain}.{kpi_name}
+MIS: gold_mis.{domain}.{subject_area}
+Retention: 7 years (aggregated history may use different policies)
+Updates: Scheduled refreshes based on business needs
+
+
+
+Naming Conventions
+
+Bronze
+
+bronze.{source_system}.{source_schema}_{source_table}
+Example: bronze.finacle.fin_gl_accounts
+
+Silver ODS
+
+silver_ods.{source_system}.{source_schema}_{source_table}
+Example: silver_ods.finacle.fin_gl_accounts
+
+Silver Analytical
+
+silver_analytical.{domain}.{entity_name}
+Example: silver_analytical.customer.customer_master
+
+Gold
+
+gold_{category}.{subcategory}.{entity_name}
+Examples:
+
+gold_regulatory.basel3.risk_exposure_summary
+gold_management.retail.daily_customer_metrics
+gold_analytics.customer.dim_customer
+Benefits
+
+Operational Benefits
+
+Clear separation of concerns (ingestion → refinement → consumption)
+Consistent data quality through progressive refinement
+Support for both operational (ODS) and analytical workloads
+Simplified troubleshooting through layered architecture
+Fast ingestion without processing bottlenecks
+Compliance Benefits
+
+Full audit trail from source to consumption (DATA-PRIN-003)
+Immutable Bronze layer for regulatory evidence
+Clear data lineage through Unity Catalog
+Support for CBUAE SupTech reporting requirements
+Cost Benefits
+
+Elimination of duplicate data copies (DATA-PRIN-004)
+Optimized storage through Delta Lake compression
+Tiered retention policies by layer
+Reduced compute through incremental processing
+Architectural Benefits
+
+Single source of truth (DATA-PRIN-004)
+AI-ready foundation (EA-PRIN-017, DATA-PRIN-009)
+Schema evolution managed at layer boundaries
+Independent consumer access patterns (queries, APIs, Delta Sharing)
