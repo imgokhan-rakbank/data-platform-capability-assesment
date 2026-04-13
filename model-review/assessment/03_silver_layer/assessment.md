@@ -374,35 +374,58 @@ This sub-area checks adherence to widely accepted Silver-layer best practices in
 
 The platform currently operates **two parallel Silver environments**, which is a fundamental architectural conformance failure and the single highest-risk finding in this assessment.
 
-### Evidence
+### Catalog Comparison
 
-| Evidence Item | Detail |
-|--------------|--------|
-| Catalog name in `pyhsical_silver.csv` | `silver_dev_v2` — the `_v2` suffix explicitly signals a prior version exists |
-| Second artifact flagged | `pyhsical_silver_2.csv` added by the platform team confirms a second Silver catalog is present and active |
-| ODS vs Analytical co-location | Both ODS-style source schemas (finacle, flexcube, fis, prime4, erp, eximbills — 103 tables) and domain-aligned analytical schemas (customer, account, loan, credit_card — 45 tables) co-exist in a single `silver_dev_v2` catalog, not in separate `silver_ods.*` / `silver_analytical.*` catalogs as defined in the architecture |
-| Architecture prescription | `architecture_patterns.txt` defines: `silver_ods.{source_system}.{schema}_{table}` and `silver_analytical.{domain}.{entity_name}` — neither namespace prefix is used in practice |
+| Attribute | `silver_dev` (pyhsical_silver_2.csv) | `silver_dev_v2` (pyhsical_silver.csv) |
+|-----------|--------------------------------------|---------------------------------------|
+| **Total tables (non-system)** | **408** | **120** |
+| **Non-system schemas** | 18 | 16 |
+| **SCD Type 2 tables** | **0** (zero — no `effective_from/to/is_current` anywhere) | 11 of 120 |
+| **Architecture pattern** | Domain-aligned analytical model (no source-system schemas) | Mixed: 11 source-system ODS schemas + 5 analytical domain schemas |
+| **Source-system schemas** | None | finacle, flexcube, erp, fis, prime4, eximbills, krm, rls, casa (103 tables) |
+| **Domain schemas** | application, assets, casa_banking, collateral, customer_riskrating_scoring, electronic_channel_transaction, gl, investments, loan, non_electronic_channel_transaction, trade, wbg_bbg + account, credit_card, customer, deposits | account, credit_card, customer, deposits, loan |
+| **GL coverage** | ✅ `gl` schema — 7 tables (gl_master, gl_transaction, gl_reconciliation, gl_adjustment, product_gl_mapping, vat_rules, central_bank_code) | ❌ Absent |
+| **Trade / Treasury coverage** | ✅ `trade` schema — 26 tables (bond, FX, FIS trade, investment products, money market) | ❌ Absent |
+| **Channel transactions** | ✅ `electronic_channel_transaction` (12 tables) + `non_electronic_channel_transaction` (8 tables) | ❌ Absent |
+| **Collateral (detailed)** | ✅ `collateral` schema — 21 tables (real estate, vehicles, securities, guarantees, FD, crypto, etc.) | ❌ Only LGD/LTV in loan schema |
+| **Application / Origination** | ✅ `application` schema — 44 tables (application, credit risk score, reference data) | ❌ Absent |
+| **Risk scoring** | ✅ `customer_riskrating_scoring` schema — 39 tables | ❌ Absent |
+| **Investments** | ✅ `investments` schema — 27 tables | ❌ Absent |
+| **WBG/BBG segmentation** | ✅ `wbg_bbg` schema — 11 tables | ❌ Absent |
+| **Data type defects** | 249 identified (status as TIMESTAMP, amounts as STRING/BIGINT) | ~35 identified |
+| **Temp/bkp/test tables** | ~26 (e.g., `_backup`, `_test`, `_dummy`, `_bkp`) | None visible |
+| **Metadata/audit schema** | ✅ `metadata` (table_lineage), `audit` (silver_table_ddls) | `control` (silver_job, silver_task, dq_logs) |
+
+### Key Interpretation
+
+`silver_dev` (v1) is the **older, broader model** built directly as a domain-aligned analytical layer with no source-system ODS pattern. It covers more banking domains (GL, Trade, Channels, Collateral, Risk Scoring, Application) but has **zero SCD2 historisation** and 249 data type defects.
+
+`silver_dev_v2` is a **newer rebuild** that introduced a source-system ODS sublayer (finacle, flexcube, etc.) and SCD2 on 11 key analytical entities — but only completed 120 tables (~30% of v1 coverage) before both catalogs were left running in parallel. Critically, the domains migrated to v2 (account, customer, loan, credit_card, deposits) represent only the core banking entities; GL, Trade, Channels, Collateral, Application, and Risk Scoring domains were never migrated.
+
+**Net result**: neither catalog alone is complete. The enterprise currently has no single Silver catalog that is both architecturally sound (SCD2, correct types) AND comprehensively covers all banking domains (GL, Trade, Risk, Channels).
 
 ### Impact Assessment
 
 | Risk Area | Impact |
 |-----------|--------|
 | Consumer confusion | Downstream teams (Risk, Finance, BBG, WBG) cannot determine which Silver catalog to read from without tribal knowledge |
-| Data inconsistency | The two Silver catalogs may contain different versions of the same entities, leading to conflicting numbers in reports |
+| Data inconsistency | `silver_dev.customer.customer` and `silver_dev_v2.customer.customer` may diverge — different data freshness, different SCD strategy |
+| Incomplete migration | GL, Trade, Channels, Collateral are only in v1 (`silver_dev`) with no SCD2 and type defects |
 | Single source of truth violation | Directly violates DATA-PRIN-004 (single source of truth mandate) referenced in the architecture patterns document |
-| Pipeline duplication | Pipelines likely run to both Silver catalogs, doubling compute cost and maintenance burden |
-| Governance gap | No documented reconciliation or migration plan between `silver_dev` (v1) and `silver_dev_v2` |
+| Pipeline duplication | Pipelines run to both Silver catalogs, doubling compute cost and maintenance burden |
 | Gold layer risk | Gold models reading from the wrong Silver catalog produce incorrect results; if Gold reads from both, definitions diverge |
+| No SCD2 in v1 | All 408 tables in `silver_dev` are SCD Type 1 only — no historical traceability for any of the GL, Trade, Channel, or Collateral entities |
+| Data quality | 249 type defects in `silver_dev` vs ~35 in `silver_dev_v2`; `_backup`, `_test`, `_dummy` tables in `silver_dev` suggest ad hoc development practices |
 
 ### Questions
 
 | # | Question | Answer / Evidence |
 |---|----------|-------------------|
-| 1 | What is the purpose of the second Silver catalog — is it a newer version replacing the first, a separate environment (dev/test), or a parallel model for a different use case? | To be confirmed from `pyhsical_silver_2.csv` analysis. Based on naming (`silver_dev_v2`), it appears to be a versioned replacement that has not yet deprecated the original. |
-| 2 | Which Gold models read from which Silver catalog — and is this documented? | Not documented. Critical risk if Gold models read from different Silver catalogs for related metrics. |
+| 1 | What is the purpose of the second Silver catalog — is it a newer version replacing the first? | **Confirmed from artifact analysis**: `silver_dev_v2` is the newer rebuild introducing the ODS sub-layer pattern and SCD2. `silver_dev` is the original broader analytical model. The v2 rebuild was incomplete (120 tables vs 408) and both were left running in parallel. |
+| 2 | Which Gold models read from which Silver catalog? | Not documented. Given `silver_dev` has 408 tables covering GL, Trade, Channels, and `silver_dev_v2` has the SCD2 customer/account/loan tables, Gold models likely read from both — but this creates definition divergence. |
 | 3 | Is there a migration plan to consolidate from two Silver catalogs to one? | No migration plan documented. |
-| 4 | Are the table schemas in the two Silver catalogs compatible — do they have the same columns, types, and naming conventions? | Pending analysis of `pyhsical_silver_2.csv`. To be completed once artifact is committed to the branch. |
-| 5 | Is the second Silver catalog (`pyhsical_silver_2.csv`) the production catalog while `silver_dev_v2` is a development/staging catalog — or vice versa? | To be determined from artifact analysis. |
+| 4 | Are the schemas compatible between the two catalogs? | Only 5 schemas overlap (account, credit_card, customer, deposits, loan). Even in overlapping schemas, table sets differ significantly — e.g., `account` has only 6 tables in common out of 18 (v2) and 33 (v1). Column naming convention also differs: v2 uses snake_case; v1 uses PascalCase in analytical tables. |
+| 5 | Which catalog should be declared authoritative? | Neither is complete on its own. A decision is needed: extend v2 to cover all domains (GL, Trade, Channels, Collateral) before deprecating v1. |
 
 ### Recommended Immediate Actions
 
