@@ -26,7 +26,7 @@
 
 > **Objective:** Establish foundations – document processes, deploy basic monitoring, formalise governance, and secure the platform.
 
-### Data Governance (Current: 1.4 → Target: 2.0)
+### Data Governance (Current: 1.0 → Target: 2.0)
 
 | ID | Backlog Item | Priority | Domain | Current Gap |
 |----|-------------|----------|--------|-------------|
@@ -34,6 +34,8 @@
 | B-GOV-02 | Identify and document Critical Data Elements (CDEs) for the top 5 data domains | P1 | Data Governance | No CDEs identified |
 | B-GOV-03 | Define and publish naming conventions for databases, tables, columns, and pipelines | P1 | Data Governance | No naming conventions |
 | B-GOV-04 | Assign data steward roles for the top 3 critical data domains | P2 | Data Governance | No stewards assigned |
+| B-GOV-05 | Define a baseline set of data format and encoding standards (date/time, currency, IDs, Boolean) | P2 | Data Governance | No format standards defined |
+| B-GOV-06 | Implement a formal business glossary with at least 50 agreed terms and designated owners | P2 | Data Governance | No formal business glossary exists |
 
 ### Data Quality Management (Current: 1.0 → Target: 2.0)
 
@@ -46,7 +48,7 @@
 | B-DQ-05 | Implement basic DQ monitoring dashboard showing pass/fail rates for critical datasets | P2 | Data Quality | No monitoring dashboards |
 
 
-### Supporting Technology (Current: 1.4 → Target: 2.0)
+### Supporting Technology (Current: 1.0 → Target: 2.0)
 
 | ID | Backlog Item | Priority | Domain | Current Gap |
 |----|-------------|----------|--------|-------------|
@@ -76,6 +78,8 @@
 | B-MGT-03 | Document data processing pipeline development standards and patterns | P2 | Data Management | No standards exist |
 | B-MGT-04 | Implement cost tagging for all Databricks and ADF resources | P2 | Data Management | No cost management |
 | B-MGT-05 | Define and document a late-arriving data handling strategy | P2 | Data Management | Not defined |
+| B-MGT-06 | Resolve the dual Silver catalog conflict – decommission `silver_dev_v2` and establish a single authoritative Silver catalog with ODS/Analytical namespace separation | P1 | Data Management | Two parallel Silver catalogs violate DATA-PRIN-004; no single source of truth |
+| B-MGT-07 | Define and enforce surrogate key strategy, SCD type assignments, and audit column standards across all Bronze and Silver tables | P1 | Data Management | No surrogate keys; SCD2 on only 7% of Silver tables; audit columns inconsistent |
 
 ### Metadata Management (Current: 1.7 → Target: 2.0)
 
@@ -84,7 +88,16 @@
 | B-META-01 | Register all critical data platform assets in Unity Catalog with business descriptions | P2 | Metadata | Platform assets not cataloged |
 | B-META-02 | Define a metadata governance process for maintaining catalog accuracy | P2 | Metadata | No governance process |
 
-### Security & Compliance (Current: 1.4 → Target: 2.0)
+### Analytics (Current: 1.0 → Target: 2.0)
+
+| ID | Backlog Item | Priority | Domain | Current Gap |
+|----|-------------|----------|--------|-------------|
+| B-ANA-01 | Define and agree on the standard visualization toolset (e.g., Power BI) and establish a basic governance policy for report publishing | P2 | Analytics | No tool standards or governance |
+| B-ANA-02 | Create a catalog of all existing reports and dashboards with ownership and refresh schedules | P2 | Analytics | No reporting inventory exists |
+| B-ANA-03 | Activate and configure the Databricks sandbox environment for exploratory data analysis with guardrails | P2 | Analytics | Sandbox environment unused |
+| B-ANA-04 | Define an analytics request and delivery process so business users can raise and track reporting needs | P3 | Analytics | All reporting is ad hoc and IT-driven |
+
+### Security & Compliance (Current: 1.0 → Target: 2.0)
 
 | ID | Backlog Item | Priority | Domain | Current Gap |
 |----|-------------|----------|--------|-------------|
