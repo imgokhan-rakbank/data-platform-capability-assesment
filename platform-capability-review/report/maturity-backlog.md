@@ -22,22 +22,11 @@
 
 ---
 
-## Backlog Summary by Maturity Level
-
-| Level | Items | Domains Impacted |
-|-------|-------|------------------|
-| Bronze | 36 | All 8 domains |
-| Silver | 40 | All 8 domains |
-| Gold | 37 | All 8 domains |
-| Platinum | 18 | All 8 domains |
-
----
-
 ## Bronze Level (Target Score: 2.0 – Developing)
 
 > **Objective:** Establish foundations – document processes, deploy basic monitoring, formalise governance, and secure the platform.
 
-### Data Governance (Current: 1.0 → Target: 2.0)
+### Data Governance (Current: 1.4 → Target: 2.0)
 
 | ID | Backlog Item | Priority | Domain | Current Gap |
 |----|-------------|----------|--------|-------------|
@@ -56,19 +45,8 @@
 | B-DQ-04 | Create a DQ rules catalog/repository with ownership and severity classification | P2 | Data Quality | No rule catalog |
 | B-DQ-05 | Implement basic DQ monitoring dashboard showing pass/fail rates for critical datasets | P2 | Data Quality | No monitoring dashboards |
 
-### Security & Compliance (Current: 1.0 → Target: 2.0)
 
-| ID | Backlog Item | Priority | Domain | Current Gap |
-|----|-------------|----------|--------|-------------|
-| B-SEC-01 | Define and document a Data Privacy Framework aligned to applicable regulations | P1 | Security | No privacy framework |
-| B-SEC-02 | Complete PII classification across all data platform datasets | P1 | Security | Only partial classification |
-| B-SEC-03 | Implement data retention and deletion policies for critical data domains | P1 | Security | No retention policies |
-| B-SEC-04 | Enable centralized audit logging for all data access and modification events | P1 | Security | No audit logging |
-| B-SEC-05 | Document and test a Data Breach Response Plan | P1 | Security | No breach response plan |
-| B-SEC-06 | Implement fine-grained RBAC with row/column-level security for sensitive datasets | P2 | Security | RBAC is basic and coarse |
-| B-SEC-07 | Define backup and disaster recovery procedures with RPO/RTO targets | P2 | Security | No backup/DR |
-
-### Supporting Technology (Current: 1.0 → Target: 2.0)
+### Supporting Technology (Current: 1.4 → Target: 2.0)
 
 | ID | Backlog Item | Priority | Domain | Current Gap |
 |----|-------------|----------|--------|-------------|
@@ -105,6 +83,18 @@
 |----|-------------|----------|--------|-------------|
 | B-META-01 | Register all critical data platform assets in Unity Catalog with business descriptions | P2 | Metadata | Platform assets not cataloged |
 | B-META-02 | Define a metadata governance process for maintaining catalog accuracy | P2 | Metadata | No governance process |
+
+### Security & Compliance (Current: 1.4 → Target: 2.0)
+
+| ID | Backlog Item | Priority | Domain | Current Gap |
+|----|-------------|----------|--------|-------------|
+| B-SEC-01 | Define and document a Data Privacy Framework aligned to applicable regulations | P1 | Security | No privacy framework |
+| B-SEC-02 | Complete PII classification across all data platform datasets | P1 | Security | Only partial classification |
+| B-SEC-03 | Implement data retention and deletion policies for critical data domains | P1 | Security | No retention policies |
+| B-SEC-04 | Enable centralized audit logging for all data access and modification events | P1 | Security | No audit logging |
+| B-SEC-05 | Document and test a Data Breach Response Plan | P1 | Security | No breach response plan |
+| B-SEC-06 | Implement fine-grained RBAC with row/column-level security for sensitive datasets | P2 | Security | RBAC is basic and coarse |
+| B-SEC-07 | Define backup and disaster recovery procedures with RPO/RTO targets | P2 | Security | No backup/DR |
 
 ---
 
@@ -336,43 +326,3 @@
 | P-META-02 | Provide regulatory lineage for BCBS 239, GDPR data mapping, and compliance reporting | P4 | Metadata | G-META-03 |
 
 ---
-
-## Implementation Sequencing
-
-```
-Phase 1: Bronze Foundation (Months 1-6)
-├── P1 items from all domains
-├── Focus: Governance, Security, Monitoring, DQ basics
-└── Target: Overall score 1.2 → 2.0
-
-Phase 2: Silver Standardisation (Months 4-12)
-├── All Silver items (overlap with Phase 1 tail)
-├── Focus: CI/CD, DQ automation, Catalog integration, Self-service pilot
-└── Target: Overall score 2.0 → 3.0
-
-Phase 3: Gold Optimisation (Months 10-18)
-├── All Gold items (overlap with Phase 2 tail)
-├── Focus: Data products, Advanced security, ML lifecycle, Full self-service
-└── Target: Overall score 3.0 → 4.0
-
-Phase 4: Platinum Innovation (Months 16-24)
-├── All Platinum items
-├── Focus: AI augmentation, Data mesh, Zero-touch, Continuous improvement
-└── Target: Overall score 4.0 → 5.0
-```
-
----
-
-## Backlog Item Count by Domain and Level
-
-| Domain | Bronze | Silver | Gold | Platinum | Total |
-|--------|--------|--------|------|----------|-------|
-| Data Governance | 7 | 6 | 4 | 2 | 19 |
-| Data Quality Management | 5 | 6 | 5 | 2 | 18 |
-| Security & Compliance | 7 | 6 | 6 | 2 | 21 |
-| Supporting Technology | 7 | 8 | 5 | 3 | 23 |
-| Data Integration | 4 | 4 | 4 | 2 | 14 |
-| Data Management | 4 | 4 | 5 | 3 | 16 |
-| Analytics | – | 4 | 4 | 2 | 10 |
-| Metadata Management | 2 | 2 | 4 | 2 | 10 |
-| **Total** | **36** | **40** | **37** | **18** | **131** |
