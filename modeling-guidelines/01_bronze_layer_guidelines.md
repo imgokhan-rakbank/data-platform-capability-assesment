@@ -18,8 +18,8 @@ The Bronze layer is the **immutable raw landing zone** of the Medallion Architec
 | # | Principle | Rationale |
 |---|-----------|-----------|
 | B-P1 | **Immutability** – Raw records are never deleted or updated once written | Provides an audit-proof replay capability and regulatory evidence trail (CBUAE, Basel III) |
-| B-P2 | **Fidelity** – Source data types, nulls, and encoding are preserved exactly | Prevents silent data loss; keeps Silver the single place of business transformation |
-| B-P3 | **Append-only by default** – CDC operations are captured as insert-new-row, not overwrite | Enables point-in-time reconstruction and Silver reprocessing |
+| B-P2 | **Fidelity** – Source data types, nulls, and encoding are preserved exactly | Prevents silent data loss |
+| B-P3 | **Append-only by default** – Changes are captured as insert-new-row, not overwrite | Enables point-in-time reconstruction and Silver reprocessing |
 | B-P4 | **Single responsibility** – Ingestion pipelines write Bronze; transformation pipelines read it | Decouples ingestion failures from transformation failures |
 | B-P5 | **Schema-first** – Every Bronze table has a declared schema (schema-on-write via Delta) | Prevents corrupt records from silently propagating downstream |
 
@@ -37,9 +37,8 @@ bronze.<source_system>.<source_schema>_<source_table>
 
 | Source System | Source Schema | Source Table | Bronze Object Name |
 |---|---|---|---|
-| finacle | fin | gl_accounts | `bronze.finacle.fin_gl_accounts` |
-| flexcube | lms | loan_master | `bronze.flexcube.lms_loan_master` |
-| fis | cards | card_account | `bronze.fis.cards_card_account` |
+| finacle | crmuser | accounts_dlt | `bronze.finacle.crmuser_accounts_dlt` |
+| flexcube | fcubsprod | cltb_amount_paid | `bronze.flexcube.fcubsprod_cltb_amount_paid` |
 
 ### 3.2 Naming Rules
 
@@ -49,6 +48,7 @@ bronze.<source_system>.<source_schema>_<source_table>
 | Source system | Must exactly match the authoritative source system code in the platform's source register |
 | Source schema/table | Must reflect the actual source object name (do not abbreviate unless the source name itself is abbreviated) |
 | Temporary/staging | Prefix with `_tmp_` and suffix with `_YYYYMMDD`; must reside outside the `bronze.*` namespace |
+| Real Time Integration | Tables with a `_dlt` suffix represent streaming / real-time (CDC or near‑real‑time) feeds. Tables without the `_dlt` suffix represent batch end-of-day (EOD) state loads. |
 | No business naming | Table and column names must not introduce business terminology absent in the source; e.g., do not rename `acct_no` to `account_number` in Bronze |
 
 ---
@@ -61,7 +61,7 @@ Every Bronze table **must** include the following system-level columns. These ar
 
 | Column Name | Data Type | Nullable | Description |
 |---|---|---|---|
-| `_ingest_timestamp` | `TIMESTAMP` (UTC) | NOT NULL | System timestamp at which the record was written to Bronze (pipeline clock, UTC) |
+| `brz_insert_time` | `TIMESTAMP` (UTC) | NOT NULL | System timestamp at which the record was written to Bronze (pipeline clock, UTC) |
 | `_source_file_name` | `STRING` | NOT NULL for file-based; NULL for CDC | Full path of the source file or Kafka topic offset reference |
 | `_batch_id` | `STRING` | NOT NULL | Unique pipeline run identifier (correlated with the orchestration job) |
 | `_op_type` | `STRING` | NOT NULL for CDC; `I` for full-load | CDC operation: `I` (insert), `U` (update), `D` (delete); full-load rows use `I` |
@@ -96,8 +96,7 @@ Every Bronze table **must** include the following system-level columns. These ar
 | Ingestion Pattern | Recommended Partition Key | Notes |
 |---|---|---|
 | Daily batch full-load | `_source_load_date DATE` | Enables date-range pruning for Silver incremental processing |
-| CDC / streaming | `CAST(_ingest_timestamp AS DATE)` | Prevents unbounded partition growth; Silver reads last N days |
-| Event-driven (Kafka) | `_source_load_date` | Align partition granularity to batch window, not to message arrival time |
+| CDC / streaming | `CAST(brz_insert_time AS DATE)` | Prevents unbounded partition growth; Silver reads last N days |
 
 > **Anti-pattern:** Do not partition by high-cardinality columns (e.g., `account_number`, `customer_id`). Partition keys must have bounded, predictable cardinality.
 
@@ -150,7 +149,7 @@ All Bronze tables **must** be registered in Unity Catalog with the following met
 | Before-image preservation | `_before_image` column captures the prior state as a JSON string for all UPDATE operations |
 | Operation code | `_op_type` column always present: `I`, `U`, `D` |
 | Delete representation | Delete events are stored as a row with `_op_type = 'D'` and all key columns populated; not a physical deletion of prior rows |
-| Out-of-order events | Bronze ingestion appends in arrival order; Silver is responsible for sequencing via `_ingest_timestamp` and source-provided sequence columns |
+| Out-of-order events | Bronze ingestion appends in arrival order; Silver is responsible for sequencing via `brz_insert_time` and source-provided sequence columns |
 | Initial load vs. incremental | Initial full-load rows carry `_op_type = 'I'`; a `_is_initial_load` flag (BOOLEAN) may be added to distinguish initial load rows from steady-state inserts |
 
 ---
@@ -161,7 +160,6 @@ All Bronze tables **must** be registered in Unity Catalog with the following met
 |---|---|
 | PII at rest | PII data lands in Bronze unmasked (necessary for Silver deduplication); access controlled at the catalog/schema level to ingestion pipelines and authorised data engineering roles only |
 | PCI DSS | Card data (PAN, CVV) must be tokenised or masked **before** writing to Bronze; clear-text card data is prohibited in Bronze |
-| Data residency | All Bronze storage must reside in the `UAE North` Azure region; no cross-region replication of Bronze data |
 | Audit logging | All read and write access to Bronze tables must be auditable via Unity Catalog access logs |
 
 ---

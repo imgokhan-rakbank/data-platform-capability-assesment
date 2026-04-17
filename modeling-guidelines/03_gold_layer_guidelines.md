@@ -17,15 +17,15 @@ Gold models must:
 - Have a **single authoritative definition** for every metric they expose
 - Be fully traceable back to Silver and Bronze via lineage
 
-Gold is organised into distinct sub-namespaces by consumption domain:
+Gold is organised into distinct sub-namespaces by consumption domain using the `gold.<category>.<subcategory>_<type>_<subject>` pattern:
 
-| Sub-Namespace | Purpose | Examples |
+| Sub-Namespace Pattern | Purpose | Examples |
 |---|---|---|
-| `gold_regulatory.<framework>.<report>` | Regulatory submission datasets | `gold_regulatory.basel3.rwa_summary` |
-| `gold_risk.<domain>.<subject>` | Risk management KPIs and dashboards | `gold_risk.credit.daily_ecl_provision` |
-| `gold_management.<domain>.<subject>` | Management reporting and MIS | `gold_management.retail.daily_customer_metrics` |
-| `gold_analytics.<domain>.<entity>` | Self-service analytics dimensions and facts | `gold_analytics.customer.dim_customer` |
-| `gold_suptech.<framework>.<report>` | CBUAE SupTech submission models | `gold_suptech.cbuae.br_credit_register` |
+| `gold.<category>.<subcategory>_<type>_<subject>` | Regulatory submission datasets | `gold.regulatory.basel3_rpt_rwa_summary` |
+| `gold.<category>.<subcategory>_<type>_<subject>` | Risk management KPIs and dashboards | `gold.risk.credit_daily_ecl_provision` |
+| `gold.<category>.<subcategory>_<type>_<subject>` | Management reporting and MIS | `gold.management.retail_daily_customer_metrics` |
+| `gold.<category>.<subcategory>_<type>_<subject>` | Self-service analytics dimensions and facts | `gold.analytics.customer_dim_customer` |
+| `gold.<category>.<subcategory>_<type>_<subject>` | CBUAE SupTech submission models | `gold.suptech.cbuae_rpt_credit_register` |
 
 ---
 
@@ -38,6 +38,7 @@ Gold is organised into distinct sub-namespaces by consumption domain:
 | G-P3 | **Explicit grain** – Every Gold fact table declares its grain in documentation and in table comments | Prevents misinterpretation of aggregation levels; critical for semi-additive measures |
 | G-P4 | **Certified before publishing** – Gold models must pass quality certification and business approval before being accessible to consumers | Prevents ungoverned data from flowing into regulatory submissions or management reports |
 | G-P5 | **Immutable snapshots for regulatory** – Point-in-time regulatory snapshots are never overwritten once produced and signed off | Provides an unalterable audit trail for CBUAE, Basel, and IFRS 9 submissions |
+|  | **Note:** While regulatory snapshots must be immutable after period close, other Gold modelling patterns (periodic immutable snapshots, accumulating snapshots, iterative/append models) depend on the use case (query patterns, performance and lineage needs) and may be applied as required. |
 | G-P6 | **Semantic layer as access boundary** – Business metrics are served through the semantic/metric layer, not through direct Gold table access by BI tools | Prevents BI tools from defining their own metric logic, causing divergence |
 
 ---
@@ -47,7 +48,7 @@ Gold is organised into distinct sub-namespaces by consumption domain:
 ### 3.1 Object Naming Pattern
 
 ```
-gold_<category>.<subcategory>.<type>_<subject>
+gold.<category>.<subcategory>_<type>_<subject>
 ```
 
 | Type Prefix | Use |
@@ -63,11 +64,11 @@ gold_<category>.<subcategory>.<type>_<subject>
 
 | Pattern | Example |
 |---|---|
-| `gold_analytics.customer.dim_customer` | Conformed customer dimension |
-| `gold_analytics.account.fact_daily_account_balance` | Daily balance snapshot fact |
-| `gold_risk.credit.agg_ecl_provision_monthly` | Monthly ECL aggregation |
-| `gold_regulatory.basel3.rpt_rwa_summary` | RWA regulatory report |
-| `gold_suptech.cbuae.rpt_credit_register` | CBUAE Credit Register submission table |
+| `gold.analytics.customer_dim_customer` | Conformed customer dimension |
+| `gold.analytics.account_fact_daily_account_balance` | Daily balance snapshot fact |
+| `gold.risk.credit_agg_ecl_provision_monthly` | Monthly ECL aggregation |
+| `gold.regulatory.basel3_rpt_rwa_summary` | RWA regulatory report |
+| `gold.suptech.cbuae_rpt_credit_register` | CBUAE Credit Register submission table |
 
 ### 3.2 Column Naming Rules
 
@@ -76,7 +77,7 @@ Gold column naming follows the same `snake_case` rules as Silver with these addi
 | Rule | Standard |
 |---|---|
 | Reporting date | `reporting_date DATE` — the business date this row represents |
-| Surrogate FK | `<dim_entity>_key STRING` — inherit Silver Analytical surrogate key; do not re-generate |
+| Surrogate FK | `<dim_entity>_key STRING` — inherit Silver surrogate key; do not re-generate |
 | Measure naming | `<measure_name>_amount / _count / _rate / _pct / _ratio` depending on measure type |
 | Currency companion | Any amount column must have a companion `<measure>_currency_code CHAR(3)` column |
 | Audit columns | See Section 6 for mandatory Gold audit columns |
@@ -102,13 +103,13 @@ The following dimensions are **conformed** — shared across all Gold fact table
 
 | Dimension | Conformed Name | Grain |
 |---|---|---|
-| Date / Calendar | `gold_analytics.shared.dim_date` | One row per calendar day; includes business calendar, fiscal period, bank holiday flag |
-| Customer / Party | `gold_analytics.customer.dim_customer` | One row per party per SCD2 version (current + history) |
-| Account | `gold_analytics.account.dim_account` | One row per account per SCD2 version |
-| Product | `gold_analytics.product.dim_product` | One row per product type in the product hierarchy |
-| Branch / Channel | `gold_analytics.channel.dim_channel` | One row per channel/branch |
-| Currency | `gold_analytics.reference.dim_currency` | One row per ISO 4217 currency code |
-| Business Unit | `gold_analytics.reference.dim_business_unit` | One row per business unit / cost centre |
+| Date / Calendar | `gold.analytics.shared_dim_date` | One row per calendar day; includes business calendar, fiscal period, bank holiday flag |
+| Customer / Party | `gold.analytics.customer_dim_customer` | One row per party per SCD2 version (current + history) |
+| Account | `gold.analytics.account_dim_account` | One row per account per SCD2 version |
+| Product | `gold.analytics.product_dim_product` | One row per product type in the product hierarchy |
+| Branch / Channel | `gold.analytics.channel_dim_channel` | One row per channel/branch |
+| Currency | `gold.analytics.reference_dim_currency` | One row per ISO 4217 currency code |
+| Business Unit | `gold.analytics.reference_dim_business_unit` | One row per business unit / cost centre |
 
 ### 4.3 Snapshot Fact Table Patterns
 
@@ -120,6 +121,8 @@ The following dimensions are **conformed** — shared across all Gold fact table
 | **Accumulating snapshot** | Multi-step business processes | `fact_loan_lifecycle` (one row per loan, columns for each lifecycle milestone) |
 
 ---
+
+Model selection and the snapshot pattern should be driven by the use case: regulatory workloads typically require immutable point-in-time snapshots, whereas management or analytical workloads may use accumulating snapshots, periodic snapshots, or iterative/append models based on performance, storage, and lineage requirements. Apply the pattern that best meets the business, technical and compliance needs.
 
 ## 5. Metric & KPI Standards
 
@@ -159,7 +162,7 @@ The following key banking metrics must be defined and certified before their res
 
 ### 5.3 Semantic Layer Integration
 
-- All certified metrics must be registered in the platform semantic layer tool (dbt Semantic Layer, Cube.dev, or equivalent)
+- All certified metrics must be registered in the platform semantic layer tool 
 - BI tools must connect to Gold through the semantic layer; direct Gold table SQL queries by BI tools are not permitted for certified metrics
 - The semantic layer definition must include: dimension list, time granularity, aggregation function, and filter restrictions
 
@@ -196,20 +199,20 @@ Every Gold table **must** include the following:
 
 | Model | Namespace | Source Silver Domain | Regulatory Framework |
 |---|---|---|---|
-| RWA Summary | `gold_regulatory.basel3.rpt_rwa_summary` | `risk_credit`, `risk_market` | Basel III Pillar 1 |
-| Capital Adequacy | `gold_regulatory.basel3.rpt_capital_adequacy` | `risk_credit`, `gl` | Basel III Pillar 1 |
-| LCR / NSFR | `gold_regulatory.basel3.rpt_liquidity_ratios` | `risk_liquidity`, `reference` | Basel III Pillar 3 |
-| IFRS 9 ECL | `gold_regulatory.ifrs9.rpt_ecl_provision` | `risk_credit`, `loan`, `account` | IFRS 9 |
-| Large Exposures | `gold_regulatory.cbuae.rpt_large_exposures` | `risk_credit`, `account`, `customer` | CBUAE |
-| Credit Register | `gold_suptech.cbuae.rpt_credit_register` | `loan`, `account`, `customer` | CBUAE SupTech |
-| AML Summary | `gold_regulatory.cbuae.rpt_aml_summary` | `compliance` | CBUAE |
+| RWA Summary | `gold.regulatory.basel3_rpt_rwa_summary` | `risk_credit`, `risk_market` | Basel III Pillar 1 |
+| Capital Adequacy | `gold.regulatory.basel3_rpt_capital_adequacy` | `risk_credit`, `gl` | Basel III Pillar 1 |
+| LCR / NSFR | `gold.regulatory.basel3_rpt_liquidity_ratios` | `risk_liquidity`, `reference` | Basel III Pillar 3 |
+| IFRS 9 ECL | `gold.regulatory.ifrs9_rpt_ecl_provision` | `risk_credit`, `loan`, `account` | IFRS 9 |
+| Large Exposures | `gold.regulatory.cbuae_rpt_large_exposures` | `risk_credit`, `account`, `customer` | CBUAE |
+| Credit Register | `gold.suptech.cbuae_rpt_credit_register` | `loan`, `account`, `customer` | CBUAE SupTech |
+| AML Summary | `gold.regulatory.cbuae_rpt_aml_summary` | `compliance` | CBUAE |
 
 ### 7.3 Reconciliation Controls for Regulatory Models
 
 Before a Gold regulatory model is submitted:
 1. Row count must be compared against a control total from the source risk/finance system
 2. Key financial totals (e.g., total ECL provision, total RWA, total eligible capital) must be reconciled to within ±0.01% of the control total
-3. Reconciliation results must be stored in a `gold_control.reconciliation_log` table and signed off by the responsible data steward
+3. Reconciliation results must be stored in a `gold.control.reconciliation_log` table and signed off by the responsible data steward
 
 ---
 
@@ -240,7 +243,7 @@ Before a Gold model is published to consumers, it must pass:
 | Documentation gate | Table comment, column comments, grain statement, metric catalogue entries all populated |
 | Lineage gate | End-to-end lineage from Gold to Bronze registered in Unity Catalog |
 
-Certification status tracked in `gold_control.model_certification_register` with: model name, version, certification date, approver, and next review date.
+Certification status tracked in `gold.control.model_certification_register` with: model name, version, certification date, approver, and next review date.
 
 ---
 
